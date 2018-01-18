@@ -1,0 +1,11 @@
+# Execute index.wsgi
+Options +ExecCGI
+AddHandler wsgi-script .wsgi
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^(.*)$ index.wsgi/$1 [END]
+</IfModule>
+
+IndexOptions +Charset=UTF-8
+

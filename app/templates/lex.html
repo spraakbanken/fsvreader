@@ -1,0 +1,62 @@
+<html>
+<style>
+  body {
+     color : grey;
+     line-height : 1.5em ;
+     font-family : verdana,arial,helvetica;
+     max-width : 600px;
+     font-family: 'Muli', sans-serif;
+     padding: 20px;
+     }
+  a { color : black; text-decoration:none; }
+  a:hover { color : blue; }
+  a.highlight {background-color: yellow; }
+  a.underline {text-decoration: underline; }
+  .ellipsis_content {
+    display: none;
+  }
+.fadeout {
+    bottom: 0em;
+    width: 100%;
+    height: 4em;
+    padding-top: 74px;
+    padding-left: 40px;
+    cursor: pointer;
+}
+
+
+</style>
+
+<body>
+{{ hword}}, {{hits}} träffar ({{'/'.join(data.keys())}})
+  <ul>
+  {% for (word, wordclass) in words %}
+    {% if data[word] %}
+      <li>
+      <a class="{{wordclass}}">{{word}}</a>
+        <ul>
+        {% for hit in data[word] %}
+          <li>
+          <div class="ellipsis">
+            <b>{{hit['lexiconName'].title().replace('oe', '\xf6').replace('-', ' ')}}</b>
+            <b><i>{{hit['pos']}}</i></b>
+            {% if hit['pre'] %}
+              <span class="ellipsis_pre" style="display: block"> {{hit['pre'] }}</span>
+              <span class="ellipsis_header">
+                <span class="fadeout"> ... </span>
+              </span>
+            <span class="ellipsis_content"> {{hit['text'] }}</span>
+            {% else %}
+              <span> {{hit['text'] }}</span>
+            {% endif %}
+          </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+   {% endif %}
+  {% endfor %}
+</ul>
+
+</body>
+   </html>
