@@ -11,6 +11,8 @@ import xml.etree.ElementTree as etree
 
 app = Flask(__name__)
 app.config["APPLICATION_ROOT"] = ""
+app.config["HOST"] = "http://localhost:5002"
+app.config['KARP'] = 'https://ws.spraakbanken.gu.se/ws/karp/v4/'
 
 #if os.path.exists(app.config.root_path + '/config.cfg') is False:
 #    print "copy config.default.cfg to config.cfg and add your settings"
@@ -38,8 +40,7 @@ def karp_query(action, query):
 
 
 def karp_request(action):
-    backend = 'https://ws.spraakbanken.gu.se/ws/karp/v5/'
-    q = Request("%s/%s" % (backend, action))
+    q = Request("%s/%s" % (app.config['KARP'], action))
     response = urlopen(q).read()
     # logging.debug(q)
     data = json.loads(response)
@@ -65,7 +66,8 @@ def text():
 def reader():
     return render_template('reader.html', textframe='fsvreader.html',
                            lexframe="fsvreader/lexseasy/hund--hime",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
+                           host=app.config["HOST"])
 
 
 @app.route("/reader/<textdir>/<textfile>")
@@ -76,7 +78,8 @@ def readerfile(textdir, textfile):
     #return 'url is %s' % texturl
     return render_template('reader.html', textframe=texturl,
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
+                           host=app.config["HOST"])
 
 
 @app.route('/fsvlex.html')
