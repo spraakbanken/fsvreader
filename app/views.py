@@ -10,7 +10,7 @@ import xml.etree.ElementTree as etree
 
 
 app = Flask(__name__)
-app.config["APPLICATION_ROOT"] = "/malin/fsvreader2"
+app.config["APPLICATION_ROOT"] = ""
 
 #if os.path.exists(app.config.root_path + '/config.cfg') is False:
 #    print "copy config.default.cfg to config.cfg and add your settings"
@@ -51,7 +51,7 @@ def deescape_filter(s):
     # return s.replace("&amp;", "&").replace("&apos;", "'").replace("&quot;", '"')
     html_parser = HTMLParser.HTMLParser()
     return html_parser.unescape(s)
- 
+
 ##########################################
 
 
@@ -67,11 +67,13 @@ def reader():
                            lexframe="fsvreader/lexseasy/hund--hime",
                            lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
 
+
 @app.route("/reader/<textdir>/<textfile>")
 def readerfile(textdir, textfile):
     # texturl = '/file/%s/%s' % (textdir, textfile)
     texturl = '%s/file/%s/%s' % (app.config["APPLICATION_ROOT"], textdir, textfile)
     # texturl = url_for('file/%s/%s' % (textdir, textfile))
+    #return 'url is %s' % texturl
     return render_template('reader.html', textframe=texturl,
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
                            lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
