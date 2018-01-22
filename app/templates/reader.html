@@ -1,8 +1,15 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+<head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Muli:600" rel="stylesheet">
 <style>
+body {
+  color : grey;
+  line-height : 1.5em ;
+  font-family : 'Muli', sans-serif,verdana,arial,helvetica;
+}
 html,
 body {
   margin: 0;
@@ -14,6 +21,13 @@ body {
   margin: 0 auto;
   max-width: 900px;
   display: flex;
+  height: 100%;
+}
+.frame {
+  overflow: auto;
+  margin: 5px;
+  border: 1px #eee solid;
+  padding: 5px;
 }
 #fsvtext {
   flex-grow: 2;
@@ -23,11 +37,8 @@ body {
   flex-grow: 1;
   flex-basis: 0;
 }
-
 a {
   cursor: pointer;
-}
-a {
   color: black;
   text-decoration: none;
 }
@@ -51,12 +62,13 @@ a.underline {
   padding-left: 40px;
   cursor: pointer;
 }
-
 </style>
+</head>
+
 <body>
 <div class="container">
-<div id="fsvtext"></div>
-<div id="lexframe"></div>
+<div class="frame" id="fsvtext"></div>
+<div class="frame" id="lexframe"></div>
 </div>
 <script>
 function foreach(elems, f) {
