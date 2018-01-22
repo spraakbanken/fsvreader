@@ -101,6 +101,7 @@ def lookup(words):
                         "splitted": '|'.join(words.split('--'))})
     try:
         for hit in res.get('hits', {}).get('hits', []):
+            _id = hit['_id']
             base = hit['_source'].get('FormRepresentations', [{}])[0].get('baseform')
             wfs = [wf.get('writtenForm', '') for wf in hit['_source'].get('WordForms', [{}])]
             # xml = hit['_source'].get('xml', '')
@@ -113,14 +114,27 @@ def lookup(words):
                 pos = ', '.join(pos)
             hit['_source']['pos'] = pos
 
-            worddata.setdefault(base, []).append(hit['_source'])
-            for wf in wfs:
-                if not wf or wf not in wordlist:
-                    continue
-                worddata.setdefault(wf, []).append(hit['_source'])
+            worddata.setdefault(base, []).append((_id, hit['_source']))
+            if base.replace('_', ' ') not in wordlist:
+                for wf in wfs:
+                    if not wf or wf not in wordlist:
+                        continue
+                    worddata.setdefault(wf, []).append((_id, hit['_source']))
     except Exception as e:
         return jsonify({"error": "%s" % e, "called": karp_q, "words": words,
                         "hits": res.get('hits', {}).get('hits')})
+
+    used = set()
+    for variant in wordlist:
+        new_list = []
+        for _id, data in worddata.get(variant):
+            if _id not in used:
+                # don't use here
+                new_list.append((_id, data))
+                #worddata[variant].pop(_id, None)
+            used.add(_id)
+        worddata[variant] = new_list
+
 
     # only list the forms that actually found a hit
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
