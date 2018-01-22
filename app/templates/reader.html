@@ -1,124 +1,189 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-  #fsvtext { width : 65%; height: 95%; display: inline-block;}
-  #lexframe { width : 33%; height: 95%; display: inline-block;}
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+.container {
+  margin: 0 auto;
+  max-width: 900px;
+  display: flex;
+}
+#fsvtext {
+  flex-grow: 2;
+  flex-basis: 0;
+}
+#lexframe {
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+a {
+  cursor: pointer;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+a:hover {
+  color: blue;
+}
+a.highlight {
+  background-color: yellow;
+}
+a.underline {
+  text-decoration: underline;
+}
+.ellipsis_content {
+  display: none;
+}
+.fadeout {
+  bottom: 0em;
+  width: 100%;
+  height: 4em;
+  padding-top: 74px;
+  padding-left: 40px;
+  cursor: pointer;
+}
+
 </style>
 <body>
-<iframe id="fsvtext" src={{textframe}}>
-</iframe>
-<iframe id="lexframe" src={{lexframe}}>
-</iframe>
+<div class="container">
+<div id="fsvtext"></div>
+<div id="lexframe"></div>
+</div>
 <script>
-function foreach(elems, f){
-for (var i = 0; i < elems.length; i++) {
-  console.log("loop", i, elems[i])
-  f(elems[i])
+function foreach(elems, f) {
+  for (var i = 0; i < elems.length; i++) {
+    //console.log("loop", i, elems[i])
+    f(elems[i])
+  }
 }
-}
-
-function linkHighlight(lexitems){
-  foreach(lexitems, function(a){
-      a.onclick = function(e) {
-        console.log("set", e)
-        e.preventDefault(); // ta bort
-        console.log('classname', e.target.className)
-        console.log('classname 2', e.target.className.match(/(?!highlight)(?:^|\s)\S+/g))
-        foreach(e.target.className.match(/(?!highlight)(?:^|\s)\S+/g), hl);
-        }
-      }
-     )
-}
-function toggle(x){
-  console.log('toggle it', x, x.style.display)
-  if (x.style.display === "block") {
-        x.style.display = "none";
-    } else {
-        x.style.display = "block";
+function get(url, k) {
+  const r = new XMLHttpRequest()
+  r.onreadystatechange = function() {
+    if (r.readyState == 4 && r.status == 200) {
+      k(r.responseText)
     }
+  }
+  r.open('GET', url, true)
+  r.send(null)
 }
-lexframe.onload = function() {
-  var lexdocument = (window.frames['lexframe'].contentDocument || window.frames['lexframe'].document);
-  var lexitems = lexdocument.getElementsByTagName("a")
-  console.log("lexframe loaded")
-  linkHighlight(lexitems)
-  var ellipsHead = lexdocument.getElementsByClassName("ellipsis_header")
-  foreach(ellipsHead, function(a){
-    a.onclick = function(e) {
-      console.log('ellipsis', e)
-      console.log('parent', this.parentNode.childNodes) // .getElementsByClassName(".ellipsis_contents"))
-      foreach(this.parentNode.childNodes, function(e){
-           console.log('this is ', e)
-           console.log('class', e.className)
-           if (e.className === "ellipsis_content") {
-             console.log('toggle', e)
-             toggle(e)
-           }
-           if (e.className === "ellipsis_pre") {
-             console.log('toggle', e)
-             toggle(e)
-           }
-           //e.toggle()
-          // e.find(".ellipsis_plus").toggle();
-           })
-        //.getElementsByClassName(".ellipsis_contents"), function(e) {e.toggle("slow")})
-      //foreach(e.parentNode.childNodes.getElementsByClassName(".ellipsis_contents"), function(e) {e.toggle("slow")})
+window.onload = function() {
+  get('{{textframe}}', function(d) {
+    var fsvtext = document.getElementById('fsvtext')
+    fsvtext.innerHTML = d
+
+    var textitems = fsvtext.getElementsByTagName('a')
+    foreach(textitems, function(a) {
+      a.onclick = function(e) {
+        e.preventDefault() // ta bort
+        console.log('click on', e.target)
+        console.log('link to', a.className)
+        links = a.className.replace(/(?:^|\s)underline(?:$|\s)/, ' ').trim()
+        console.log('link on', links)
+        links = links.replace(/(?:^|\s)hl(?:$|\s)/, ' ')
+        console.log('link on', links)
+        links = links.replace(/\s+/g, '--')
+        console.log('link on', links)
+        removeclass('underline')
+        removeclass('highlight')
+        e.target.className += ' underline'
+        load_lex('{{lexurl}}' + links)
       }
     })
+    console.log('klar')
+  })
 }
-window.onload = function () {
-  var lexframe = window.frames['lexframe']
-  var textframe = window.frames['fsvtext']
-
-  var lexitems = (window.frames['lexframe'].contentDocument || window.frames['lexframe'].document).getElementsByTagName("a")
-  console.log("lexitems", lexitems)
-  linkHighlight(lexitems)
-
-  var textitems = (window.frames['fsvtext'].contentDocument || window.frames['fsvtext'].document).getElementsByTagName("a")
-  foreach(textitems, function(a){
+function load_lex(url) {
+  get(url, function(d) {
+    var lexframe = document.getElementById('lexframe')
+    lexframe.innerHTML = d
+    var lexitems = lexframe.getElementsByTagName('a')
+    linkHighlight(lexitems)
+    var ellipsHead = lexframe.getElementsByClassName('ellipsis_header')
+    foreach(ellipsHead, function(a) {
       a.onclick = function(e) {
-        e.preventDefault(); // ta bort
-        console.log("click on", e.target)
-        console.log("link to", a.className)
-        links = a.className.replace(/(?:^|\s)underline(?:$|\s)/, " ").trim();
-        console.log("link on", links)
-        links = links.replace(/(?:^|\s)hl(?:$|\s)/, " ");
-        console.log("link on", links)
-        links = links.replace(/\s+/g, "--");
-        console.log("link on", links)
-        removeclass("underline")
-        removeclass("highlight")
-        e.target.className += " underline"
-        lexframe.src = "{{lexurl}}"+links
-        }
+        console.log('ellipsis', e)
+        console.log('parent', this.parentNode.childNodes) // .getElementsByClassName(".ellipsis_contents")
+        foreach(this.parentNode.childNodes, function(e) {
+          console.log('this is ', e)
+          console.log('class', e.className)
+          if (e.className === 'ellipsis_content') {
+            console.log('toggle', e)
+            toggle(e)
+          }
+          if (e.className === 'ellipsis_pre') {
+            console.log('toggle', e)
+            toggle(e)
+          }
+          //e.toggle()
+          // e.find(".ellipsis_plus").toggle();
+        })
+        //.getElementsByClassName(".ellipsis_contents"), function(e) {e.toggle("slow")}
+        //foreach(e.parentNode.childNodes.getElementsByClassName(".ellipsis_contents"), function(e) {e.toggle("slow")})
       }
-      )
-    console.log("klar", (window.frames['lexframe'].contentDocument || window.frames['lexframe'].document).getElementsByTagName("a"))
+    })
+  })
 }
 
-function hl(s){
-  console.log("hl running")
-  removeclass("highlight")
-  var iframe = window.frames['fsvtext'];
-  var frameDoc = (iframe.contentDocument || iframe.document);
-  console.log('find by class', s)
-  var as = frameDoc.getElementById("text").getElementsByClassName(s)
-  console.log("iframe", as)
-  foreach(as, function(a){a.className += " highlight"})
-      }
+function linkHighlight(lexitems) {
+  foreach(lexitems, function(a) {
+    a.onclick = function(e) {
+      console.log('set', e)
+      e.preventDefault() // ta bort
+      console.log('classname', e.target.className)
+      console.log(
+        'classname 2',
+        e.target.className.match(/(?!highlight)(?:^|\s)\S+/g)
+      )
+      foreach(e.target.className.match(/(?!highlight)(?:^|\s)\S+/g), hl)
+    }
+  })
+}
+function toggle(x) {
+  console.log('toggle it', x, x.style.display)
+  if (x.style.display === 'block') {
+    x.style.display = 'none'
+  } else {
+    x.style.display = 'block'
+  }
+}
 
-function removeclass(s){
+function hl(s) {
+  console.log('hl running')
+  removeclass('highlight')
+  var frameDoc = document.getElementById('fsvtext')
+  console.log('find by class', s)
+  var as = frameDoc.getElementsByClassName(s)
+  console.log('iframe', as)
+  foreach(as, function(a) {
+    a.className += ' highlight'
+  })
+}
+
+function removeclass(s) {
   console.log('remove', s)
-  var iframe = window.frames['fsvtext'];
-  var frameDoc = (iframe.contentDocument || iframe.document);
+  var frameDoc = document.getElementById('fsvtext')
   var hls = frameDoc.getElementsByClassName(s)
   var hlscopy = []
-  foreach(hls, function(h) {hlscopy.push(h)})
-  foreach(hlscopy, function(a){
-      console.log("innan", a.className);
-      a.className = a.className.replace(new RegExp("(?:^|\\s)"+s+"(?:\\s|$)"), " ");
-      console.log("efter", a.className)
-      })
+  foreach(hls, function(h) {
+    hlscopy.push(h)
+  })
+  foreach(hlscopy, function(a) {
+    console.log('innan', a.className)
+    a.className = a.className.replace(
+      new RegExp('(?:^|\\s)' + s + '(?:\\s|$)'),
+      ' '
+    )
+    console.log('efter', a.className)
+  })
 }
 
 </script>
