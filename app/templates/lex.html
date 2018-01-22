@@ -8,7 +8,7 @@
       <a class="{{wordclass}}">{{word}}</a>
         <ul>
         {% for _id, hit in data[word] %}
-          <li>
+          <li class="padd2">
           <div class="ellipsis">
             <b>{{hit['lexiconName'].title().replace('oe', '\xf6').replace('-', ' ')}}</b>
             <b><i>{{hit['pos']}}</i></b>

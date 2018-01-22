@@ -127,6 +127,8 @@ def lookup(words):
     used = set()
     for variant in wordlist:
         new_list = []
+        if variant not in worddata:
+            continue
         for _id, data in worddata.get(variant):
             if _id not in used:
                 # don't use here
@@ -140,7 +142,8 @@ def lookup(words):
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
-                           hits=res.get("hits", {}).get("total", 0))
+                           hits=sum(len(v) for v in worddata.values()))
+                           #hits=res.get("hits", {}).get("total", 0))
 
 
 @app.route('/')
