@@ -89,6 +89,8 @@ def lookup(words):
     try:
         worddata = {}
         wordlist = words.split('--')
+        # sometimes, the headword is repetead as the first alternative
+        # only look for it once
         if len(wordlist) > 1 and wordlist[0] == wordlist[1]:
             wordlist = wordlist[1:]
         wordlist = [word.replace('_', ' ') for word in wordlist]
@@ -120,13 +122,10 @@ def lookup(words):
         return jsonify({"error": "%s" % e, "called": karp_q, "words": words,
                         "hits": res.get('hits', {}).get('hits')})
 
-    #for word in words.split('--'):
-    #    if word not in worddata:
-    #        karp_q = {'q' : "extended||and|baseform|equals|%s" % word}
-    #        worddata[word] = karp_query('query', karp_q)
-    wordlist = [(word, word.replace(' ', '_')) for word in wordlist]
+    # only list the forms that actually found a hit
+    wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
-                           data=worddata,
+                           data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
                            hits=res.get("hits", {}).get("total", 0))
 
 

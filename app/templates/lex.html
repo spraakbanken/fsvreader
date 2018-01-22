@@ -1,6 +1,6 @@
 <html>
 <body>
-{{ hword}}, {{hits}} träffar ({{'/'.join(data.keys())}})
+{{ hword}}, {{hits}} träffar ({{hitlist}})
   <ul>
   {% for (word, wordclass) in words %}
     {% if data[word] %}
