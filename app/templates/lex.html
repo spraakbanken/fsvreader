@@ -1,32 +1,4 @@
 <html>
-<style>
-  body {
-     color : grey;
-     line-height : 1.5em ;
-     font-family : verdana,arial,helvetica;
-     max-width : 600px;
-     font-family: 'Muli', sans-serif;
-     padding: 20px;
-     }
-  a { color : black; text-decoration:none; }
-  a:hover { color : blue; }
-  a.highlight {background-color: yellow; }
-  a.underline {text-decoration: underline; }
-  .ellipsis_content {
-    display: none;
-  }
-.fadeout {
-    bottom: 0em;
-    width: 100%;
-    height: 4em;
-    padding-top: 74px;
-    padding-left: 40px;
-    cursor: pointer;
-}
-
-
-</style>
-
 <body>
 {{ hword}}, {{hits}} träffar ({{'/'.join(data.keys())}})
   <ul>
@@ -59,4 +31,4 @@
 </ul>
 
 </body>
-   </html>
+</html>
