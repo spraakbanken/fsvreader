@@ -1,5 +1,4 @@
 aldre_lagar	Äldre lagar
-aldre_religios_prosa	Äldre religiös prosa
 nysvenska_bibel	Nysvenska bibel
 nysvenska_dalin	Nysvenska dalin
 nysvenska_kronikor	Nysvenska krönikor

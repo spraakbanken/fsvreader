@@ -3,6 +3,7 @@ from flask import jsonify, render_template, Flask
 import HTMLParser  # in app
 import json  # in app
 import os
+import re
 import urllib  # in app
 from urllib2 import Request, urlopen  # in app
 import xml.etree.ElementTree as etree
@@ -106,6 +107,8 @@ def lookup(words):
             wfs = [wf.get('writtenForm', '') for wf in hit['_source'].get('WordForms', [{}])]
             # xml = hit['_source'].get('xml', '')
             text = " ".join(etree.fromstring(hit['_source'].get('xml').encode('utf-8')).itertext())
+            if re.search('^%s[ ,.;]*[sS]e\s\S*[,.:]*$' % base, text):
+                continue
             if len(text) > 30:
                 hit['_source']['pre'] = text[:30]
             hit['_source']['text'] = text
@@ -114,36 +117,48 @@ def lookup(words):
                 pos = ', '.join(pos)
             hit['_source']['pos'] = pos
 
-            worddata.setdefault(base, []).append((_id, hit['_source']))
-            if base.replace('_', ' ') not in wordlist:
+            # if the base form is a requested lemma (=in wordlist), add the
+            # entry under its base form and bother about the other word forms
+            if base.replace('_', ' ') in wordlist:
+                worddata.setdefault(base, []).append((_id, hit['_source']))
+            # if not, go through them to find the interesting once
+            else:
                 for wf in wfs:
                     if not wf or wf not in wordlist:
                         continue
+                    # if wf is a requested lemma (=in wordlist), add it
                     worddata.setdefault(wf, []).append((_id, hit['_source']))
     except Exception as e:
         return jsonify({"error": "%s" % e, "called": karp_q, "words": words,
                         "hits": res.get('hits', {}).get('hits')})
 
+    # go through all words and make sure every hit is only linked to one lemma
     used = set()
+    # go through the words in the same order as the input list
     for variant in wordlist:
         new_list = []
         if variant not in worddata:
             continue
         for _id, data in worddata.get(variant):
             if _id not in used:
-                # don't use here
+                # add to the output
                 new_list.append((_id, data))
-                #worddata[variant].pop(_id, None)
             used.add(_id)
         worddata[variant] = new_list
+    [worddata.pop(key, None) for key in worddata.keys() if len(worddata[key]) == 0]
 
 
     # only list the forms that actually found a hit
+    print 'worddata'
+    print [(k, len(v)) for k,v in worddata.items()]
+    print 'wordlist  pre',  wordlist
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
+    print 'wordlist  post',  wordlist
+
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
+                           # count the number of hits that we decided to keep
                            hits=sum(len(v) for v in worddata.values()))
-                           #hits=res.get("hits", {}).get("total", 0))
 
 
 @app.route('/')
