@@ -14,7 +14,7 @@ function get(url, k) {
   r.open('GET', url, true)
   r.send(null)
 }
-window.main = function(textframe_url) {
+window.main = function(textframe_url, lexurl) {
   get(textframe_url, function(d) {
     var fsvtext = document.getElementById('fsvtext')
     fsvtext.innerHTML = d
@@ -34,7 +34,7 @@ window.main = function(textframe_url) {
         removeclass('underline')
         removeclass('highlight')
         e.target.className += ' underline'
-        load_lex('{{lexurl}}' + links)
+        load_lex(lexurl + links)
       }
     })
     console.log('klar')
