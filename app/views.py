@@ -54,6 +54,21 @@ def deescape_filter(s):
 ##########################################
 
 
+@app.route('/reader/<dummy>/favicon.ico')
+def favicon(dummy):
+    return send_static_file("favicon.ico")
+
+
+@app.route('/reader/<dummy>/<filename>.js')
+def static_js(dummy, filename):
+    return send_static_file(filename + ".js")
+
+
+@app.route('/reader/<dummy>/<filename>.css')
+def static_css(dummy, filename):
+    return send_static_file(filename + ".css")
+
+
 @app.route('/fsvreader.html')
 def text():
     return serve_static_page("fsvreader")
@@ -75,11 +90,6 @@ def readerfile(textdir, textfile):
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
                            lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
                            host=app.config["HOST"])
-
-
-@app.route('/favicon.ico')
-def favicon():
-    return send_static_file("favicon.ico")
 
 
 @app.route('/fsvlex.html')
