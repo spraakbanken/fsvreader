@@ -1,5 +1,5 @@
 import codecs
-from flask import jsonify, render_template, Flask
+from flask import jsonify, render_template, Flask, send_file
 import HTMLParser  # in app
 import json  # in app
 import os
@@ -25,6 +25,10 @@ def serve_static_page(page, title=''):
                            content=data.decode('utf-8'),
                            title=title)
 
+
+def send_static_file(page):
+    path = '%spages/static/%s' % (app.config["APPLICATION_ROOT"], page)
+    return send_file(path)
 
 def karp_query(action, query):
     query['mode'] = 'historic_ii'
@@ -75,8 +79,7 @@ def readerfile(textdir, textfile):
 
 @app.route('/favicon.ico')
 def favicon():
-    # FIXME: I keep getting 404 here
-    return app.send_static_file("pages/static/favicon.ico")
+    return send_static_file("favicon.ico")
 
 
 @app.route('/fsvlex.html')
