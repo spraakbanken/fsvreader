@@ -11,9 +11,11 @@ import xml.etree.ElementTree as etree
 
 
 app = Flask(__name__)
-app.config["APPLICATION_ROOT"] = "/malin/fsvreader3/"
-app.config["APPLICATION_PATH"] = "/export/htdocs/malin/fsvreader3/app/"
-app.config["HOST"] = "/malin/fsvreader3"
+# The path from your web server to this directory.
+# If you run the application directly with python, use ""
+app.config["APPLICATION_ROOT"] = ""
+# The absolute path to this directory. Extra slash for urljoin
+app.config["APPLICATION_PATH"] = os.path.dirname(__file__)+'/'
 app.config['KARP'] = 'https://ws.spraakbanken.gu.se/ws/karp/v4/'
 
 
@@ -80,8 +82,7 @@ def text():
 def reader():
     return render_template('reader.html', textframe='fsvreader.html',
                            lexframe="fsvreader/lexseasy/hund--hime",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           host=app.config["HOST"])
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
 
 
 @app.route("/reader/<textdir>/<textfile>")
@@ -90,8 +91,7 @@ def readerfile(textdir, textfile):
     # texturl = url_for('file/%s/%s' % (textdir, textfile))
     return render_template('reader.html', textframe=texturl,
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           host=app.config["HOST"])
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
 
 
 @app.route('/fsvlex.html')
