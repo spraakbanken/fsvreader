@@ -73,6 +73,12 @@ def readerfile(textdir, textfile):
                            host=app.config["HOST"])
 
 
+@app.route('/favicon.ico')
+def favicon():
+    # FIXME: I keep getting 404 here
+    return app.send_static_file("pages/static/favicon.ico")
+
+
 @app.route('/fsvlex.html')
 def lex():
     return serve_static_page("fsvlex")
