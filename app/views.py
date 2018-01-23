@@ -6,12 +6,16 @@ import os
 import re
 import urllib  # in app
 from urllib2 import Request, urlopen  # in app
+import urlparse
 import xml.etree.ElementTree as etree
 
 
 app = Flask(__name__)
+# The path from your web server to this directory.
+# If you run the application directly with python, use ""
 app.config["APPLICATION_ROOT"] = ""
-app.config["HOST"] = "http://localhost:5002"
+# The absolute path to this directory. Extra slash for urljoin
+app.config["APPLICATION_PATH"] = os.path.dirname(__file__)+'/'
 app.config['KARP'] = 'https://ws.spraakbanken.gu.se/ws/karp/v4/'
 
 
@@ -27,7 +31,7 @@ def serve_static_page(page, title=''):
 
 
 def send_static_file(page):
-    path = '%spages/static/%s' % (app.config["APPLICATION_ROOT"], page)
+    path = urlparse.urljoin(app.config["APPLICATION_PATH"], 'pages/static/%s' % page)
     return send_file(path)
 
 def karp_query(action, query):
@@ -78,8 +82,7 @@ def text():
 def reader():
     return render_template('reader.html', textframe='fsvreader.html',
                            lexframe="fsvreader/lexseasy/hund--hime",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           host=app.config["HOST"])
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
 
 
 @app.route("/reader/<textdir>/<textfile>")
@@ -88,8 +91,7 @@ def readerfile(textdir, textfile):
     # texturl = url_for('file/%s/%s' % (textdir, textfile))
     return render_template('reader.html', textframe=texturl,
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
-                           host=app.config["HOST"])
+                           lexurl=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/")
 
 
 @app.route('/fsvlex.html')
@@ -136,7 +138,7 @@ def lookup(words):
             text = " ".join(etree.fromstring(hit['_source'].get('xml').encode('utf-8')).itertext())
             if re.search('^%s[ ,.;]*[sS]e\s\S*[,.:]*$' % base, text):
                 continue
-            if len(text) > 30:
+            if len(text) > 40:
                 hit['_source']['pre'] = text[:30]
             hit['_source']['text'] = text
             pos = hit['_source'].get('FormRepresentations', [{}])[0].get('partOfSpeech', '')
@@ -184,11 +186,7 @@ def lookup(words):
 
     
     # only list the forms that actually found a hit
-    print 'worddata'
-    print [(k, len(v)) for k,v in worddata.items()]
-    print 'wordlist  pre',  wordlist
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
-    print 'wordlist  post',  wordlist
 
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
@@ -199,7 +197,7 @@ def lookup(words):
 @app.route('/')
 def main():
     # move to config or use the config above
-    APP_STATIC = os.path.join(app.config['APPLICATION_ROOT'], 'pages')
+    APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     textdirspath = os.path.join(APP_STATIC, 'lists/dirs.txt')
     dirs = []
     for d in codecs.open(textdirspath).readlines():
@@ -211,7 +209,7 @@ def main():
 @app.route('/dir/<dirname>')
 def showdir(dirname):
     # move to config or use the config above
-    APP_STATIC = os.path.join(app.config['APPLICATION_ROOT'], 'pages')
+    APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     textspath = os.path.join(APP_STATIC, dirname)
     dirs = []
     root = app.config["APPLICATION_ROOT"]
@@ -226,8 +224,16 @@ def showdir(dirname):
 @app.route('/file/<dirname>/<filename>')
 def showtext(dirname, filename):
     # move to config or use the config above
-    APP_STATIC = os.path.join(app.config['APPLICATION_ROOT'], 'pages')
+    APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
     return render_template('fsvtext.html', text=text)
+
+
+# @app.errorhandler(Exception)
+# def handle_invalid_usage(error):
+#     response = jsonify(error.to_dict())
+#     response.status_code = error.status_code
+#     return response
+
