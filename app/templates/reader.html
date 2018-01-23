@@ -16,7 +16,9 @@
 </div>
 <script type="text/javascript" src="reader.js"></script>
 <script type="text/javascript">
-window.onload = main('{{textframe}}', '{{lexurl}}')
+window.onload = function () {
+    window.main('{{textframe}}', '{{lexurl}}')
+}
 </script>
 </body>
 {% endblock %}
