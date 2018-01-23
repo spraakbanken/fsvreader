@@ -10,7 +10,7 @@
         {% for _id, hit in data[word] %}
           <li class="padd2">
           <div class="ellipsis">
-            <b>{{hit['lexiconName'].title().replace('oe', '\xf6').replace('-', ' ')}}</b>
+            <b>{{hit['lexiconName'][0].upper()}}{{hit['lexiconName'][1:].replace('oe', '\xf6').replace('-', ' ')}}</b>
             <b><i>{{hit['pos']}}</i></b>
             {% if hit['pre'] %}
               <span class="ellipsis_pre" style="display: block"> {{hit['pre'] }}</span>

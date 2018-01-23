@@ -102,6 +102,8 @@ def emptylookup():
     return ""
 
 
+from pprint import pprint
+
 @app.route('/fsvreader/lexseasy/<words>')
 def lookup(words):
     karp_q = ''
@@ -109,16 +111,22 @@ def lookup(words):
     try:
         worddata = {}
         wordlist = words.split('--')
+
         # sometimes, the headword is repetead as the first alternative
         # only look for it once
         if len(wordlist) > 1 and wordlist[0] == wordlist[1]:
             wordlist = wordlist[1:]
+
+        # if the first entry is a number, set it apart
+        numberword = wordlist[0] if wordlist and wordlist[0].isdigit() else ''
+        
         wordlist = [word.replace('_', ' ') for word in wordlist]
         karp_q = {'q': "extended||and|wfC|equals|%s" % '|'.join(wordlist).encode('utf8')}
         res = karp_query('query', karp_q)
     except:
         return jsonify({"call": karp_q, "words": words,
                         "splitted": '|'.join(words.split('--'))})
+    
     try:
         for hit in res.get('hits', {}).get('hits', []):
             _id = hit['_id']
@@ -167,6 +175,14 @@ def lookup(words):
     [worddata.pop(key, None) for key in worddata.keys() if len(worddata[key]) == 0]
 
 
+    # add in the numberword with a dummy entry
+    if numberword:
+        worddata[numberword] = [(u'DEADDEADDEAD',{'lexiconName':'Romerska-siffror',
+                                                  'pre':'',
+                                                  'txt':'',
+                                                  'pos':'nl'})]
+
+    
     # only list the forms that actually found a hit
     print 'worddata'
     print [(k, len(v)) for k,v in worddata.items()]
