@@ -195,7 +195,6 @@ def lookup(words):
 
 @app.route('/')
 def main():
-    # move to config or use the config above
     APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     textdirspath = os.path.join(APP_STATIC, 'lists/dirs.txt')
     dirs = []
@@ -207,7 +206,6 @@ def main():
 
 @app.route('/dir/<dirname>')
 def showdir(dirname):
-    # move to config or use the config above
     APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     textspath = os.path.join(APP_STATIC, dirname)
     dirs = []
@@ -218,17 +216,17 @@ def showdir(dirname):
         dirs.append((path.strip(), text.strip().strip('"'), year.strip().strip('"')))
 
     return render_template('menu.html', textdirs=dirs, title="Texter",
-                           backbutton=True)
+                           backbutton=root)
 
 
 @app.route('/file/<dirname>/<filename>')
 def showtext(dirname, filename):
-    # move to config or use the config above
+    root = app.config["APPLICATION_ROOT"]
     APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
-    return render_template('fsvtext.html', text=text, back=dirname)
+    return render_template('fsvtext.html', text=text, back=urlparse.urljoin(root, 'dir/'+dirname))
 
 
 # @app.errorhandler(Exception)
