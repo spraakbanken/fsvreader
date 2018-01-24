@@ -1,11 +1,11 @@
 import codecs
 from flask import jsonify, render_template, Flask, send_file
-import HTMLParser  # in app
-import json  # in app
+import HTMLParser
+import json
 import os
 import re
-import urllib  # in app
-from urllib2 import Request, urlopen  # in app
+import urllib
+from urllib2 import Request, urlopen
 import urlparse
 import xml.etree.ElementTree as etree
 
@@ -20,7 +20,6 @@ app.config['KARP'] = 'https://ws.spraakbanken.gu.se/ws/karp/v4/'
 
 
 ########################################
-# TODO should be in app, but can't import
 def serve_static_page(page, title=''):
     with app.open_resource("pages/static/%s.html" % page) as f:
         data = f.read()
@@ -33,6 +32,7 @@ def serve_static_page(page, title=''):
 def send_static_file(page):
     path = urlparse.urljoin(app.config["APPLICATION_PATH"], 'pages/static/%s' % page)
     return send_file(path)
+
 
 def karp_query(action, query):
     query['mode'] = 'historic_ii'
@@ -104,8 +104,6 @@ def emptylookup():
     return ""
 
 
-from pprint import pprint
-
 @app.route('/fsvreader/lexseasy/<words>')
 def lookup(words):
     karp_q = ''
@@ -121,14 +119,14 @@ def lookup(words):
 
         # if the first entry is a number, set it apart
         numberword = wordlist[0] if wordlist and wordlist[0].isdigit() else ''
-        
+
         wordlist = [word.replace('_', ' ') for word in wordlist]
         karp_q = {'q': "extended||and|wfC|equals|%s" % '|'.join(wordlist).encode('utf8')}
         res = karp_query('query', karp_q)
     except:
         return jsonify({"call": karp_q, "words": words,
                         "splitted": '|'.join(words.split('--'))})
-    
+
     try:
         for hit in res.get('hits', {}).get('hits', []):
             _id = hit['_id']
@@ -147,10 +145,10 @@ def lookup(words):
             hit['_source']['pos'] = pos
 
             # if the base form is a requested lemma (=in wordlist), add the
-            # entry under its base form and bother about the other word forms
+            # entry under its base form and don't bother about other word forms
             if base.replace('_', ' ') in wordlist:
                 worddata.setdefault(base, []).append((_id, hit['_source']))
-            # if not, go through them to find the interesting once
+            # if not, go through the word forms to find the interesting ones
             else:
                 for wf in wfs:
                     if not wf or wf not in wordlist:
@@ -174,17 +172,18 @@ def lookup(words):
                 new_list.append((_id, data))
             used.add(_id)
         worddata[variant] = new_list
+    # exclude the words that got all their data stolen by other words in the
+    # loop above
     [worddata.pop(key, None) for key in worddata.keys() if len(worddata[key]) == 0]
-
 
     # add in the numberword with a dummy entry
     if numberword:
-        worddata[numberword] = [(u'DEADDEADDEAD',{'lexiconName':'Romerska-siffror',
-                                                  'pre':'',
-                                                  'txt':'',
-                                                  'pos':'nl'})]
+        worddata[numberword] = [(u'DEADDEADDEAD',
+                                 {'lexiconName': 'Romerska-siffror',
+                                  'pre': '',
+                                  'txt': '',
+                                  'pos': 'nl'})]
 
-    
     # only list the forms that actually found a hit
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
 
@@ -218,7 +217,8 @@ def showdir(dirname):
         path = '%s/reader/%s/%s' % (root, dirname, path)
         dirs.append((path.strip(), text.strip().strip('"'), year.strip().strip('"')))
 
-    return render_template('menu.html', textdirs=dirs, title="Texter")
+    return render_template('menu.html', textdirs=dirs, title="Texter",
+                           backbutton=True)
 
 
 @app.route('/file/<dirname>/<filename>')
@@ -228,7 +228,7 @@ def showtext(dirname, filename):
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
-    return render_template('fsvtext.html', text=text)
+    return render_template('fsvtext.html', text=text, back=dirname)
 
 
 # @app.errorhandler(Exception)
@@ -236,4 +236,3 @@ def showtext(dirname, filename):
 #     response = jsonify(error.to_dict())
 #     response.status_code = error.status_code
 #     return response
-
