@@ -133,7 +133,7 @@ def lookup(words):
         for hit in res.get('hits', {}).get('hits', []):
             _id = hit['_id']
             base = hit['_source'].get('FormRepresentations', [{}])[0].get('baseform')
-            wfs = [wf.get('writtenForm', '') for wf in hit['_source'].get('WordForms', [{}])]
+            wfs = [wf.get('writtenForm', '') for wf in hit['_source'].get('WordForms', [{}]) if wf.get('tag','') == 'derived']
             # xml = hit['_source'].get('xml', '')
             text = " ".join(etree.fromstring(hit['_source'].get('xml').encode('utf-8')).itertext())
             if re.search('^%s[ ,.;]*[sS]e\s\S*[,.:]*$' % base, text):
@@ -151,30 +151,15 @@ def lookup(words):
             if base.replace('_', ' ') in wordlist:
                 worddata.setdefault(base, []).append((_id, hit['_source']))
             # if not, go through them to find the interesting once
-            else:
-                for wf in wfs:
-                    if not wf or wf not in wordlist:
-                        continue
-                    # if wf is a requested lemma (=in wordlist), add it
+            for wf in wfs:
+                print wf
+                wf = wf.strip('*?')
+                if wf in wordlist:
                     worddata.setdefault(wf, []).append((_id, hit['_source']))
+
     except Exception as e:
         return jsonify({"error": "%s" % e, "called": karp_q, "words": words,
                         "hits": res.get('hits', {}).get('hits')})
-
-    # go through all words and make sure every hit is only linked to one lemma
-    used = set()
-    # go through the words in the same order as the input list
-    for variant in wordlist:
-        new_list = []
-        if variant not in worddata:
-            continue
-        for _id, data in worddata.get(variant):
-            if _id not in used:
-                # add to the output
-                new_list.append((_id, data))
-            used.add(_id)
-        worddata[variant] = new_list
-    [worddata.pop(key, None) for key in worddata.keys() if len(worddata[key]) == 0]
 
 
     # add in the numberword with a dummy entry
@@ -188,6 +173,9 @@ def lookup(words):
     # only list the forms that actually found a hit
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
 
+
+    # pprint(worddata)
+    
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
                            # count the number of hits that we decided to keep
