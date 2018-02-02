@@ -45,6 +45,18 @@ function load_lex(url) {
   get(url, function(d) {
     var lexframe = document.getElementById('lexframe')
     lexframe.innerHTML = d
+    foreach(lexframe.getElementsByClassName('ellipsis'), function(item) {
+      console.log('item', item)
+      var word = item.dataset.word
+      var targets = item.getElementsByClassName("replace_target")
+      foreach(targets, function(target) {
+        console.log('target', target)
+        target.innerHTML = target.innerHTML.replace(new RegExp(word, 'i'),
+          function (Word) {
+            return '<span style="background: yellow;">' + Word + '</span>'
+          })
+      })
+    })
     var lexitems = lexframe.getElementsByTagName('a')
     linkHighlight(lexitems)
     var ellipsHead = lexframe.getElementsByClassName('ellipsis_header')
@@ -55,7 +67,7 @@ function load_lex(url) {
         foreach(this.parentNode.childNodes, function(e) {
           console.log('this is ', e)
           console.log('class', e.className)
-          if (e.className === 'ellipsis_content') {
+          if (new String(e.className).indexOf('ellipsis_content') != -1) {
             console.log('toggle', e)
             toggle(e)
           }
