@@ -39,7 +39,7 @@ a:hover {
   color: blue;
 }
 a.highlight {
-  background-color: yellow;
+    background-color: gold;
 }
 a.underline {
   text-decoration: underline;
