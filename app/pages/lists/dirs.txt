@@ -1,11 +1,3 @@
 aldre_lagar	Äldre lagar
-nysvenska_bibel	Nysvenska bibel
-nysvenska_dalin	Nysvenska dalin
-nysvenska_kronikor	Nysvenska krönikor
-nysvenska_lagar	Nysvenska lagar
-nysvenska_ovrigt	Nysvenska övrigt
-profan_prosa	Profan prosa
-verser	Verser
-yngre_lagar	Yngre lagar
-yngre_regilios_prosa	Yngre religiös prosa
-yngre_tankebocker	Yngre tankeböcker
+aldre_profan	Äldre övrigt profan prosa
+aldre_religios	Äldre religiös prosa

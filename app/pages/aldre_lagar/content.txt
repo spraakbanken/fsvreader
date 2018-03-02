@@ -1,2 +1,7 @@
+ÄVgL.html | "Äldre Västgötalagen, enligt Holm B 59" | "txt ca 1220 / ms ca 1280"
+Yvgl.html | "Yngre Västgötalagen, enligt Holm B 58" | "txt ca 1280 / ms ca 1350"
+GL.html | "Gutalagen, enligt Holm B 64" |  "ms ca 1350"
+DL.html | "Äldre Västmannalagen / Dalalagen, enligt Holm B 54" | "txt ca 1280"
+HL.html | "Hälsingelagen, enligt Ups B 49" | "ms 1350–1400"
+BjR.html | "Bjärköarätten, enligt Holm B58" | "ms ca 1350"
 SdmL-A.html |    "Södermannalagen, enligt Codex iuris Sudermannici" | "1330-1400"
-Yvgl.html |    "Yngre Västgötalagen, enligt Holm B 58" | "1280-1399"
