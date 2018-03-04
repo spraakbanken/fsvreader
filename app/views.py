@@ -187,7 +187,7 @@ def main():
     for d in codecs.open(textdirspath).readlines():
         path, text = d.split('\t')
         dirs.append(('dir/'+path.strip(), text.strip()))
-    return render_template('menu.html', textdirs=dirs, title="Kategorier")
+    return render_template('firstpage.html', textdirs=dirs, title="")
 
 
 @app.route('/dir/<dirname>')

@@ -1,1 +1,3 @@
+Legendarium-B.html |    "Fornsvenska legendariet, enligt Ups C 528" | "txt 1276–1308 / ms 1400-50"
+Moses-B.html |    "Pentateuchparafrasen, enligt Holm A1" | "txt 1300–50 / ms 1526"
 Birgitta_aut-B.html |    "Birgittas uppenbarelser, fsv original" | "1340–1370"
