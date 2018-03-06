@@ -171,8 +171,6 @@ def lookup(words):
     wordlist = [(word, word.replace(' ', '_')) for word in wordlist if word in worddata]
 
 
-    # pprint(worddata)
-    
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
                            # count the number of hits that we decided to keep
@@ -199,7 +197,8 @@ def showdir(dirname):
     for d in codecs.open(textspath+'/content.txt').readlines():
         path, text, year = d.split('|')
         path = '%s/reader/%s/%s' % (root, dirname, path)
-        dirs.append((path.strip(), text.strip().strip('"'), year.strip().strip('"')))
+        dirs.append((path.strip(), text.strip().strip('"'),
+                     year.strip().strip('"').decode('utf8')))
 
     return render_template('menu.html', textdirs=dirs, title="Texter",
                            backbutton=root)
@@ -212,7 +211,8 @@ def showtext(dirname, filename):
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
-    return render_template('fsvtext.html', text=text, back=urlparse.urljoin(root, 'dir/'+dirname))
+    return render_template('fsvtext.html', text=text.decode('utf8'),
+                           back=urlparse.urljoin(root, 'dir/'+dirname))
 
 
 # @app.errorhandler(Exception)
