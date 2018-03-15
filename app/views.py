@@ -87,7 +87,7 @@ def reader():
 
 @app.route("/reader/<textdir>/<textfile>")
 def readerfile(textdir, textfile):
-    texturl = '%s/file/%s/%s' % (app.config["APPLICATION_ROOT"], textdir, textfile)
+    texturl = '/fsvreader/file/%s/%s' % (textdir, textfile)
     # texturl = url_for('file/%s/%s' % (textdir, textfile))
     return render_template('reader.html', textframe=texturl,
                            lexframe=app.config["APPLICATION_ROOT"]+"/fsvreader/lexseasy/",
@@ -99,12 +99,12 @@ def lex():
     return serve_static_page("fsvlex")
 
 
-@app.route('/fsvreader/lexseasy/')
+@app.route('/lexseasy/')
 def emptylookup():
     return ""
 
 
-@app.route('/fsvreader/lexseasy/<words>')
+@app.route('/lexseasy/<words>')
 def lookup(words):
     karp_q = ''
     worddata = {}
@@ -193,26 +193,24 @@ def showdir(dirname):
     APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     textspath = os.path.join(APP_STATIC, dirname)
     dirs = []
-    root = app.config["APPLICATION_ROOT"]
     for d in codecs.open(textspath+'/content.txt').readlines():
         path, text, year = d.split('|')
-        path = '%s/reader/%s/%s' % (root, dirname, path)
+        path = '/fsvreader/reader/%s/%s' % (dirname, path)
         dirs.append((path.strip(), text.strip().strip('"'),
                      year.strip().strip('"').decode('utf8')))
 
     return render_template('menu.html', textdirs=dirs, title="Texter",
-                           backbutton=root)
+                           backbutton="..")
 
 
 @app.route('/file/<dirname>/<filename>')
 def showtext(dirname, filename):
-    root = app.config["APPLICATION_ROOT"]
     APP_STATIC = os.path.join(app.config['APPLICATION_PATH'], 'pages')
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
     return render_template('fsvtext.html', text=text.decode('utf8'),
-                           back=urlparse.urljoin(root, 'dir/'+dirname))
+                           back="../../dir/"+dirname)
 
 
 # @app.errorhandler(Exception)
