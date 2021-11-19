@@ -1,12 +1,12 @@
 import codecs
 from flask import jsonify, render_template, Flask, send_file
-import HTMLParser
+import html.parser
 import json
 import os
 import re
-import urllib
-from urllib2 import Request, urlopen
-import urlparse
+import urllib.request, urllib.parse, urllib.error
+from urllib.request import Request, urlopen
+import urllib.parse
 import xml.etree.ElementTree as etree
 
 
@@ -25,12 +25,12 @@ def serve_static_page(page, title=''):
         data = f.read()
 
     return render_template('page_static.html',
-                           content=data.decode('utf-8'),
+                           content=data,
                            title=title)
 
 
 def send_static_file(page):
-    path = urlparse.urljoin(app.config["APPLICATION_PATH"], 'pages/static/%s' % page)
+    path = urllib.parse.urljoin(app.config["APPLICATION_PATH"], 'pages/static/%s' % page)
     return send_file(path)
 
 
@@ -38,7 +38,7 @@ def karp_query(action, query):
     query['mode'] = 'historic_ii'
     query['resource'] = 'schlyter,soederwall,soederwall-supp'
     query['size'] = 25  # app.config['RESULT_SIZE']
-    params = urllib.urlencode(query)
+    params = urllib.parse.urlencode(query)
     return karp_request("%s?%s" % (action, params))
 
 
@@ -50,10 +50,10 @@ def karp_request(action):
     return data
 
 
-@app.template_filter('deescape')
-def deescape_filter(s):
-    html_parser = HTMLParser.HTMLParser()
-    return html_parser.unescape(s)
+# @app.template_filter('deescape')
+# def deescape_filter(s):
+#     html_parser = html.parser.HTMLParser()
+#     return html_parser.unescape(s)
 
 ##########################################
 
@@ -161,7 +161,7 @@ def lookup(words):
 
     # add in the numberword with a dummy entry
     if numberword:
-        worddata[numberword] = [(u'DEADDEADDEAD',
+        worddata[numberword] = [('DEADDEADDEAD',
                                  {'lexiconName': 'Romerska-siffror',
                                   'pre': '',
                                   'txt': '',
@@ -174,7 +174,7 @@ def lookup(words):
     return render_template('lex.html', hword=wordlist[0][0], words=wordlist,
                            data=worddata, hitlist='/'.join([w[0] for w in wordlist]),
                            # count the number of hits that we decided to keep
-                           hits=sum(len(v) for v in worddata.values()))
+                           hits=sum(len(v) for v in list(worddata.values())))
 
 
 @app.route('/')
@@ -197,7 +197,7 @@ def showdir(dirname):
         path, text, year = d.split('|')
         path = '/fsvreader/reader/%s/%s' % (dirname, path)
         dirs.append((path.strip(), text.strip().strip('"'),
-                     year.strip().strip('"').decode('utf8')))
+                     year.strip().strip('"')))
 
     return render_template('menu.html', textdirs=dirs, title="Texter",
                            backbutton="..")
@@ -209,7 +209,7 @@ def showtext(dirname, filename):
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
-    return render_template('fsvtext.html', text=text.decode('utf8'),
+    return render_template('fsvtext.html', text=text,
                            back="../../dir/"+dirname)
 
 
@@ -218,3 +218,7 @@ def showtext(dirname, filename):
 #     response = jsonify(error.to_dict())
 #     response.status_code = error.status_code
 #     return response
+
+
+if __name__ == '__main__':
+    app.run(port=5002)

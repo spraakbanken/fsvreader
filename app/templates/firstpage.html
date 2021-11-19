@@ -21,12 +21,12 @@
 <div>
   <h2>FSvReader</h2>
 <p>Texterna och metainformationen i FSvReader har hämtats från <a href="http://project2.sol.lu.se/fornsvenska">Fornsvenska textbanken</a>. För utförligare information, inklusive introducerande kommentarer för varje text om inskrivningsprinciperna, hänvisar vi till Fornsvenska textbanken.</p>
-  
+
  <p>Kategorier
  <ul>
     {% for dir in textdirs %}
       <li>
-      <a href="{{dir[0]}}">{{dir[1].decode('utf8')}}</a>
+      <a href="{{dir[0]}}">{{dir[1]}}</a>
       {% if dir[2] %}
         {{dir[2]}}
       {% endif %}

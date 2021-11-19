@@ -21,7 +21,7 @@
  <ul>
     {% for dir in textdirs %}
       <li>
-      <a href="{{dir[0]}}">{{dir[1].decode('utf8')}}</a>
+      <a href="{{dir[0]}}">{{dir[1]}}</a>
       {% if dir[2] %}
         {{dir[2]}}
       {% endif %}

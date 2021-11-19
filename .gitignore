@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# temporary files
+*.py.bak
+
+# editor config
+.vscode/
