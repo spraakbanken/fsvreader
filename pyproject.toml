@@ -4,13 +4,27 @@ version = "0.1.0"
 description = ""
 authors = ["Språkbanken Text <sb-info@svenska.gu.se>"]
 license = "MIT"
+packages = [
+  { include = "app" }
+]
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.10"
 Flask = "^2.0.2"
 gunicorn = "^20.1.0"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.group.dev.dependencies]
+watchfiles = "^0.20.0"
+black = "^23.9.1"
+mypy = "^1.5.1"
+
+[tool.poetry.group.ci]
+optional = true
+
+[tool.poetry.group.ci.dependencies]
+ruff = "^0.0.289"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
