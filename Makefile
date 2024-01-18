@@ -68,3 +68,20 @@ build:
 serve-dev:
 	${INVENV} watchfiles "gunicorn --chdir app --bind 'localhost:8000' app.views:app" app
 
+default_cov := "--cov=app"
+cov_report := "term-missing"
+cov := ${default_cov}
+
+all_tests := tests
+tests := tests
+
+.PHONY: test
+test: run-all-tests
+.PHONY: run-all-tests
+run-all-tests:
+	${INVENV} pytest -vv ${tests}
+
+.PHONY: test-w-coverage
+test-w-coverage:
+	${INVENV} pytest -vv ${cov} --cov-report=${cov_report} ${all_tests}
+

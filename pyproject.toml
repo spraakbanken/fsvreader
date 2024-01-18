@@ -5,7 +5,7 @@ description = "Add your description here"
 authors = [
     { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
-dependencies = ["flask>=2, <3", "gunicorn>=21.2.0"]
+dependencies = ["flask>=3.0.0,<4", "gunicorn>=21.2.0"]
 readme = "README.md"
 requires-python = ">= 3.10"
 license = { text = "MIT" }
@@ -25,6 +25,7 @@ dev-dependencies = [
     "pytest>=7.4.4",
     "mypy>=1.8.0",
     "ruff>=0.1.13",
+    "pytest-cov>=4.1.0",
 ]
 
 [tool.hatch.metadata]
