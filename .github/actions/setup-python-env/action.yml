@@ -54,5 +54,5 @@ runs:
 
     - name: Install dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-      run: rye sync --features=ci
+      run: make install-dev
       shell: bash

@@ -22,9 +22,9 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "watchfiles>=0.21.0",
-    "black>=23.12.1",
     "pytest>=7.4.4",
     "mypy>=1.8.0",
+    "ruff>=0.1.13",
 ]
 
 [tool.hatch.metadata]

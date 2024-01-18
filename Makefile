@@ -50,11 +50,11 @@ lint:
 	${INVENV} ruff app
 
 fmt:
-	${INVENV} black app
+	${INVENV} ruff format app
 
 .PHONY: check-fmt
 check-fmt:
-	${INVENV} black --check app
+	${INVENV} ruff format --check app
 
 # type-check the code
 .PHONY: type-check
