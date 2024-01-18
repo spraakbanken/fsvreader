@@ -1,15 +1,14 @@
 import codecs
-from flask import jsonify, render_template, Flask, send_file
 import json
 import os
 import re
-import urllib.request
-import urllib.parse
 import urllib.error
-from urllib.request import Request, urlopen
 import urllib.parse
+import urllib.request
 import xml.etree.ElementTree as etree
+from urllib.request import Request, urlopen
 
+from flask import Flask, jsonify, render_template, send_file
 
 app = Flask(__name__)
 # The path from your web server to this directory.
