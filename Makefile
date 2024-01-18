@@ -3,7 +3,7 @@
 .default: help
 
 ifeq (${VIRTUAL_ENV},)
-  INVENV = poetry run
+  INVENV = rye run
 else
   INVENV =
 endif
@@ -36,14 +36,14 @@ help:
 
 dev: install-dev
 install-dev:
-	poetry install
+	rye sync --no-lock
 
 install:
-	poetry install --only main --sync
+	rye sync --no-dev --no-lock
 
 # setup CI environment
 install-ci: install-dev
-	poetry install --only ci
+	rye sync --no-lock --features=ci
 
 .PHONY: lint
 lint:
@@ -63,8 +63,8 @@ type-check:
 
 # build the project
 build:
-	poetry build
+	rye build
 
 serve-dev:
-	${INVENV} watchfiles "uvicorn --bind localhost:8000 app.views:app" app
+	${INVENV} watchfiles "gunicorn --chdir app --bind 'localhost:8000' app.views:app" app
 

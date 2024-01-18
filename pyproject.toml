@@ -1,31 +1,34 @@
-[tool.poetry]
+[project]
 name = "fsvreader"
 version = "0.1.0"
-description = ""
-authors = ["Språkbanken Text <sb-info@svenska.gu.se>"]
-license = "MIT"
-packages = [
-  { include = "app" }
+description = "Add your description here"
+authors = [
+    { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
+dependencies = ["flask>=2, <3", "gunicorn>=21.2.0"]
+readme = "README.md"
+requires-python = ">= 3.10"
+license = { text = "MIT" }
 
-[tool.poetry.dependencies]
-python = "^3.10"
-Flask = "^2.0.2"
-gunicorn = "^20.1.0"
 
-[tool.poetry.dev-dependencies]
-
-[tool.poetry.group.dev.dependencies]
-watchfiles = "^0.20.0"
-black = "^23.9.1"
-mypy = "^1.5.1"
-
-[tool.poetry.group.ci]
-optional = true
-
-[tool.poetry.group.ci.dependencies]
-ruff = "^0.0.289"
+[project.optional-dependencies]
+ci = ["ruff>=0.1.13"]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.rye]
+managed = true
+dev-dependencies = [
+    "watchfiles>=0.21.0",
+    "black>=23.12.1",
+    "pytest>=7.4.4",
+    "mypy>=1.8.0",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
