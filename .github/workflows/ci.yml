@@ -2,14 +2,13 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-    tags:
-      - v*
-  pull_request: {}
+  pull_request:
+  merge_group:
+
+permissions:
+  contents: read
 
 env:
-  POETRY_VERSION: "1.3.1"
   MINIMUM_PYTHON_VERSION: "3.10"
 
 jobs:
@@ -32,43 +31,16 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Set up python ${{ env.MINIMUM_PYTHON_VERSION }}
-        id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+      
+      #----------------------------------------------
+      #  -----  install & configure python & rye  -----
+      #----------------------------------------------
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
         with:
           python-version: ${{ env.MINIMUM_PYTHON_VERSION }}
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('.github/workflows/ci.yml')}}
-      #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: |
-          poetry install --no-interaction --no-root
-          poetry install --only ci
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install library
-        run: poetry install --no-interaction
+
       #----------------------------------------------
       # Run matrix task
       #----------------------------------------------
@@ -94,43 +66,15 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Set up python ${{ env.MINIMUM_PYTHON_VERSION }}
-        id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+      
+      #----------------------------------------------
+      #  -----  install & configure python & rye  -----
+      #----------------------------------------------
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
         with:
           python-version: ${{ env.MINIMUM_PYTHON_VERSION }}
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('.github/workflows/ci.yml')}}
-      #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: |
-          poetry install --no-interaction --no-root
-          poetry install --only ci
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install library
-        run: poetry install --no-interaction
       #----------------------------------------------
       # Run matrix task
       #----------------------------------------------
@@ -156,43 +100,15 @@ jobs:
       #       check-out repo and set-up python
       #----------------------------------------------
       - name: Check out repository
-        uses: actions/checkout@v3
-      - name: Set up python ${{ env.MINIMUM_PYTHON_VERSION }}
-        id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+      
+      #----------------------------------------------
+      #  -----  install & configure python & rye  -----
+      #----------------------------------------------
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
         with:
           python-version: ${{ env.MINIMUM_PYTHON_VERSION }}
-      #----------------------------------------------
-      #  -----  install & configure poetry  -----
-      #----------------------------------------------
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      #----------------------------------------------
-      #       load cached venv if cache exists
-      #----------------------------------------------
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/pyproject.toml') }}-${{ hashFiles('.github/workflows/ci.yml')}}
-      #----------------------------------------------
-      # install dependencies if cache does not exist
-      #----------------------------------------------
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: |
-          poetry install --no-interaction --no-root
-          poetry install --only ci
-      #----------------------------------------------
-      # install your root project, if required
-      #----------------------------------------------
-      - name: Install library
-        run: poetry install --no-interaction
       #----------------------------------------------
       # Run matrix task
       #----------------------------------------------
