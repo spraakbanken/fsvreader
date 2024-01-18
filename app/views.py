@@ -1,37 +1,34 @@
 import codecs
-from flask import jsonify, render_template, Flask, send_file
 import json
 import os
 import re
-import urllib.request
-import urllib.parse
 import urllib.error
-from urllib.request import Request, urlopen
 import urllib.parse
+import urllib.request
 import xml.etree.ElementTree as etree
+from urllib.request import Request, urlopen
 
+from flask import Flask, jsonify, render_template, send_file
 
 app = Flask(__name__)
 # The path from your web server to this directory.
 # If you run the application directly with python, use ""
 app.config["APPLICATION_ROOT"] = ""
 # The absolute path to this directory. Extra slash for urljoin
-app.config["APPLICATION_PATH"] = os.path.dirname(__file__) + "/"
+app.config["APPLICATION_PATH"] = f"{os.path.dirname(__file__)}/"
 app.config["KARP"] = "https://ws.spraakbanken.gu.se/ws/karp/v4/"
 
 
 ########################################
 def serve_static_page(page, title=""):
-    with app.open_resource("pages/static/%s.html" % page) as f:
+    with app.open_resource(f"pages/static/{page}.html") as f:
         data = f.read()
 
     return render_template("page_static.html", content=data, title=title)
 
 
 def send_static_file(page):
-    path = urllib.parse.urljoin(
-        app.config["APPLICATION_PATH"], "pages/static/%s" % page
-    )
+    path = urllib.parse.urljoin(app.config["APPLICATION_PATH"], f"pages/static/{page}")
     return send_file(path)
 
 
@@ -40,15 +37,13 @@ def karp_query(action, query):
     query["resource"] = "schlyter,soederwall,soederwall-supp"
     query["size"] = 25  # app.config['RESULT_SIZE']
     params = urllib.parse.urlencode(query)
-    return karp_request("%s?%s" % (action, params))
+    return karp_request(f"{action}?{params}")
 
 
 def karp_request(action):
-    q = Request("%s/%s" % (app.config["KARP"], action))
+    q = Request(f'{app.config["KARP"]}/{action}')
     response = urlopen(q).read()
-    # logging.debug(q)
-    data = json.loads(response)
-    return data
+    return json.loads(response)
 
 
 # @app.template_filter('deescape')
@@ -66,12 +61,12 @@ def favicon(dummy):
 
 @app.route("/reader/<dummy>/<filename>.js")
 def static_js(dummy, filename):
-    return send_static_file(filename + ".js")
+    return send_static_file(f"{filename}.js")
 
 
 @app.route("/reader/<dummy>/<filename>.css")
 def static_css(dummy, filename):
-    return send_static_file(filename + ".css")
+    return send_static_file(f"{filename}.css")
 
 
 @app.route("/fsvreader.html")
@@ -91,7 +86,7 @@ def reader():
 
 @app.route("/reader/<textdir>/<textfile>")
 def readerfile(textdir, textfile):
-    texturl = "/fsvreader/file/%s/%s" % (textdir, textfile)
+    texturl = f"/fsvreader/file/{textdir}/{textfile}"
     # texturl = url_for('file/%s/%s' % (textdir, textfile))
     return render_template(
         "reader.html",
@@ -128,9 +123,7 @@ def lookup(words):
         numberword = wordlist[0] if wordlist and wordlist[0].isdigit() else ""
 
         wordlist = [word.replace("_", " ") for word in wordlist]
-        karp_q = {
-            "q": "extended||and|wfC|equals|%s" % "|".join(wordlist).encode("utf8")
-        }
+        karp_q = {"q": f'extended||and|wfC|equals|{"|".join(wordlist).encode("utf8")}'}
         res = karp_query("query", karp_q)
     except Exception:
         return jsonify(
@@ -178,7 +171,7 @@ def lookup(words):
     except Exception as e:
         return jsonify(
             {
-                "error": "%s" % e,
+                "error": f"{e}",
                 "called": karp_q,
                 "words": words,
                 "hits": res.get("hits", {}).get("hits"),
@@ -215,7 +208,7 @@ def main():
     dirs = []
     for d in codecs.open(textdirspath).readlines():
         path, text = d.split("\t")
-        dirs.append(("dir/" + path.strip(), text.strip()))
+        dirs.append((f"dir/{path.strip()}", text.strip()))
     return render_template("firstpage.html", textdirs=dirs, title="")
 
 
@@ -224,9 +217,9 @@ def showdir(dirname):
     APP_STATIC = os.path.join(app.config["APPLICATION_PATH"], "pages")
     textspath = os.path.join(APP_STATIC, dirname)
     dirs = []
-    for d in codecs.open(textspath + "/content.txt").readlines():
+    for d in codecs.open(f"{textspath}/content.txt").readlines():
         path, text, year = d.split("|")
-        path = "/fsvreader/reader/%s/%s" % (dirname, path)
+        path = f"/fsvreader/reader/{dirname}/{path}"
         dirs.append((path.strip(), text.strip().strip('"'), year.strip().strip('"')))
 
     return render_template("menu.html", textdirs=dirs, title="Texter", backbutton="..")
@@ -238,7 +231,7 @@ def showtext(dirname, filename):
     dirpath = os.path.join(APP_STATIC, dirname)
     textspath = os.path.join(dirpath, filename)
     text = codecs.open(textspath).read()
-    return render_template("fsvtext.html", text=text, back="../../dir/" + dirname)
+    return render_template("fsvtext.html", text=text, back=f"../../dir/{dirname}")
 
 
 # @app.errorhandler(Exception)
