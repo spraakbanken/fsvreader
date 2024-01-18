@@ -1,20 +1,20 @@
 default: test
 
-INVENV := if env_var_or_default('VIRTUAL_ENV', "") == "" { "poetry run" } else { "" }
+INVENV := if env_var_or_default('VIRTUAL_ENV', "") == "" { "rye run" } else { "" }
 
 
 alias dev := install-dev
 # installs the project for development
 install-dev:
-	poetry install
+	rye sync --no-lock
 
 # installs the project for deployment
 install:
-	poetry install --only main
+	rye sync --no-lock --no-dev
 
 # setup CI environment
 install-ci: install-dev
-	poetry install --only ci
+	rye sync --no-lock --features=ci
 
 
 # lint all code

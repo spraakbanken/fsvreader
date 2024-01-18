@@ -1,0 +1,58 @@
+name: "setup-python-env"
+description: "Composite action to setup the Python and rye environment."
+
+inputs:
+  cache-extra-key:
+    required: false
+    description: "Extra cache key to use"
+    default: ""
+  python-version:
+    required: false
+    description: "The python version to use"
+    default: "3.11"
+  rye-version:
+    required: false
+    description: "The version of rye to use"
+    default: "latest"
+outputs:
+  python-version:
+    description: "Python version used"
+    value: ${{ steps.set-python-version.outputs.python-version }}
+  rye-version:
+    description: "rye version used"
+    value: ${{ steps.set-rye-version.outputs.poetry-version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install rye
+      id: setup-rye
+      uses: eifinger/setup-rye@f8f2ca26808cdffef0b77c4fddf4305a5e5b010a
+      with:
+        version: ${{ inputs.rye-version }}
+
+    - name: Pin python version
+      run: rye pin ${{ inputs.python-version }}
+      shell: bash
+
+    - name: Output python version
+      id: set-python-version
+      run: echo "python-version=$(rye run python -c 'import sys; print(".".join(map(str, sys.version_info[0:3])))')" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Output rye version
+      id: set-rye-version
+      run: echo "rye-version=${{ steps.setup-rye.outputs.rye-version}}" >> $GITHUB_OUTPUT
+      shell: bash
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.set-python-version.outputs.python-version }}-${{ inputs.cache-extra-key }}-${{ hashFiles('**/pyproject.toml') }}
+
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: rye sync --features=ci
+      shell: bash
