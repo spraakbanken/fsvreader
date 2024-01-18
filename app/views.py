@@ -197,7 +197,7 @@ def lookup(words):
         data=worddata,
         hitlist="/".join([w[0] for w in wordlist]),
         # count the number of hits that we decided to keep
-        hits=sum(len(v) for v in list(worddata.values())),
+        hits=sum(len(v) for v in worddata.values()),
     )
 
 
