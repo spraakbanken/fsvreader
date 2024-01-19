@@ -189,8 +189,8 @@ jobs:
       
             - name: convert coverage to xml
               run: |
+                pwd
                 ls -R .
-                ls -R coverage
                 coverage combine 
                 coverage xml -i 
                 ls
