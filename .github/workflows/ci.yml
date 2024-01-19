@@ -191,8 +191,8 @@ jobs:
               run: |
                 pwd
                 ls -aR .
-                coverage combine --data-file=.coverage
-                coverage xml -i --data-file=.coverage
+                coverage combine .coverage*/.coverage
+                coverage xml -i
                 ls -a
       
             - name: Upload coverage to Codecov
