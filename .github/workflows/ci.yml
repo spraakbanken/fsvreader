@@ -191,6 +191,7 @@ jobs:
               run: |
                 pwd
                 ls -a .
+                cat .coverage*
                 coverage combine --data-file=.coverage
                 coverage xml -i --data-file=.coverage
                 ls -a
