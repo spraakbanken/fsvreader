@@ -116,7 +116,7 @@ jobs:
         run: ${{ matrix.task.run }}
 
   coverage:
-    name: "Test py-${{ matrix.python-version }} (${{ matrix.os }}) [jsonlib: ${{ matrix.json-lib }}]"
+    name: "Test py-${{ matrix.python-version }} (${{ matrix.os }})"
     strategy:
       max-parallel: 4
       fail-fast: false
@@ -150,16 +150,11 @@ jobs:
       - name: Run tests for coverage
         run: make test-w-coverage
 
-      - name: copy coverage
-        run: |
-          mkdir coverage
-          cp -v .coverage coverage/.coverage.${{ matrix.os }}-py${{ matrix.python-version }}
-
       - name: store coverage files
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
-          path: coverage
+          name: .coverage-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: .coverage
       
       
   upload-coverage:
@@ -189,7 +184,7 @@ jobs:
             - name: download coverage files
               uses: actions/download-artifact@v4
               with:
-                name: coverage
+                pattern: .coverage-*
                 path: coverage
       
             - name: convert coverage to xml
