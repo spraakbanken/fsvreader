@@ -190,8 +190,7 @@ jobs:
             - name: convert coverage to xml
               run: |
                 pwd
-                ls -a .
-                cat .coverage*
+                ls -aR .
                 coverage combine --data-file=.coverage
                 coverage xml -i --data-file=.coverage
                 ls -a
