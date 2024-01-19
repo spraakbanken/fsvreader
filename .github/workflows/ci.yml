@@ -189,7 +189,8 @@ jobs:
       
             - name: convert coverage to xml
               run: |
-                ls coverage
+                ls -R .
+                ls -R coverage
                 coverage combine --data-file=coverage/.coverage
                 coverage xml -i --data-file=coverage/.coverage
                 ls
