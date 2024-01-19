@@ -190,10 +190,10 @@ jobs:
             - name: convert coverage to xml
               run: |
                 pwd
-                ls -aR .
-                coverage combine 
-                coverage xml -i 
-                ls
+                ls -a .
+                coverage combine --data-file=.coverage
+                coverage xml -i --data-file=.coverage
+                ls -a
       
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
