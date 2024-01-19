@@ -185,14 +185,14 @@ jobs:
               uses: actions/download-artifact@v4
               with:
                 pattern: .coverage-*
-                path: coverage
+                # path: coverage
       
             - name: convert coverage to xml
               run: |
                 ls -R .
                 ls -R coverage
-                coverage combine --data-file=coverage/.coverage
-                coverage xml -i --data-file=coverage/.coverage
+                coverage combine 
+                coverage xml -i 
                 ls
       
             - name: Upload coverage to Codecov
