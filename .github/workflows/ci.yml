@@ -189,10 +189,10 @@ jobs:
       
             - name: convert coverage to xml
               run: |
+                ls coverage
                 coverage combine --data-file=coverage/.coverage
                 coverage xml -i --data-file=coverage/.coverage
                 ls
-                ls coverage
       
             - name: Upload coverage to Codecov
               uses: codecov/codecov-action@v3
