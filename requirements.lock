@@ -9,7 +9,7 @@
 -e file:.
 blinker==1.7.0
 click==8.1.7
-flask==2.3.3
+flask==3.0.0
 gunicorn==21.2.0
 itsdangerous==2.1.2
 jinja2==3.1.3
