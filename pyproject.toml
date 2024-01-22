@@ -5,7 +5,7 @@ description = "Add your description here"
 authors = [
     { name = "Kristoffer Andersson", email = "kristoffer.andersson@gu.se" },
 ]
-dependencies = ["flask>=2, <3", "gunicorn>=21.2.0"]
+dependencies = ["flask>=3.0.0,<4", "gunicorn>=21.2.0"]
 readme = "README.md"
 requires-python = ">= 3.10"
 license = { text = "MIT" }
