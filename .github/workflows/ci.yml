@@ -115,12 +115,102 @@ jobs:
       - name: ${{ matrix.task.name }}
         run: ${{ matrix.task.run }}
 
+  coverage:
+    name: "Test py-${{ matrix.python-version }} (${{ matrix.os }})"
+    strategy:
+      max-parallel: 4
+      fail-fast: false
+      matrix:
+        # ignore windows for now
+        os: [ubuntu] #, macos] # , windows-latest]
+        python-version:
+          - "3.10"
+          - "3.11"
+          - "3.12"
 
+    runs-on: ${{ matrix.os }}-latest
+    steps:
+      #----------------------------------------------
+      #       check-out repo and set-up python
+      #----------------------------------------------
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      #----------------------------------------------
+      #  -----  install & configure python & rye  -----
+      #----------------------------------------------
+      - name: Set up the environment
+        uses: ./.github/actions/setup-python-env
+        with:
+          python-version: ${{ matrix.python-version }}
+      
+      #----------------------------------------------
+      # Run tests and upload coverage
+      #----------------------------------------------
+      - name: Run tests for coverage
+        run: make test-w-coverage
+
+      - name: store coverage files
+        uses: actions/upload-artifact@v4
+        with:
+          name: .coverage-${{ matrix.os }}-py${{ matrix.python-version }}
+          path: .coverage
+      
+      
+  upload-coverage:
+          name: Upload test coverage to CodeCov
+          needs: [coverage]
+          runs-on: ubuntu-latest
+          permissions:
+            statuses: write
+          steps:
+            #----------------------------------------------
+            #       check-out repo and set-up python
+            #----------------------------------------------
+            - name: Check out repository
+              uses: actions/checkout@v4
+            - name: Set up python ${{ env.MINIMUM_PYTHON_VERSION }}
+              id: setup-python
+              uses: actions/setup-python@v5
+              with:
+                python-version: ${{ env.MINIMUM_PYTHON_VERSION }}
+      
+            #----------------------------------------------
+            # install dependencies if cache does not exist
+            #----------------------------------------------
+            - name: Install dependencies
+              run: pip install coverage
+      
+            - name: download coverage files
+              uses: actions/download-artifact@v4
+              with:
+                pattern: .coverage-*
+                # path: coverage
+      
+            - name: convert coverage to xml
+              run: |
+                pwd
+                ls -aR .
+                coverage combine .coverage*/.coverage
+                coverage xml -i
+                ls -a
+      
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v3
+              with:
+                token: ${{ secrets.CODECOV_TOKEN }}
+                # directory: ./coverage
+                # env_vars: OS,PYTHON
+                fail_ci_if_error: false
+                # files: ./coverage/coverage.xml
+                # flags: unittests
+                # name: codecov-umbrella
+                verbose: true
 
    # https://github.com/marketplace/actions/alls-green#why used for branch protection checks
   check:
     if: always()
-    needs: [lint, type-check, check-fmt]
+    needs: [lint, type-check, check-fmt, coverage]
     runs-on: ubuntu-latest
     steps:
       - name: Decide whether the needed jobs succeeded or failed
