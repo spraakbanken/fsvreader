@@ -26,6 +26,10 @@ def create_app(config=None):
     else:
         app.config.from_mapping(config)
 
+    @app.route("/reader/favicon.ico")
+    def _favicon_base():
+        return send_static_file("favicon.ico")
+
     @app.route("/reader/<dummy>/favicon.ico")
     def favicon(dummy):
         return send_static_file("favicon.ico")
@@ -34,8 +38,16 @@ def create_app(config=None):
     def static_js(dummy, filename):
         return send_static_file(f"{filename}.js")
 
+    @app.route("/reader/<filename>.js")
+    def _static_js_base(filename):
+        return send_static_file(f"{filename}.js")
+
     @app.route("/reader/<dummy>/<filename>.css")
     def static_css(dummy, filename):
+        return send_static_file(f"{filename}.css")
+
+    @app.route("/reader/<filename>.css")
+    def static_css_base(filename):
         return send_static_file(f"{filename}.css")
 
     @app.route("/fsvreader.html")
