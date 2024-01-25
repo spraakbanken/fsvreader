@@ -41,10 +41,6 @@ install-dev:
 install:
 	rye sync --no-dev --no-lock
 
-# setup CI environment
-install-ci: install-dev
-	rye sync --no-lock --features=ci
-
 .PHONY: lint
 lint:
 	${INVENV} ruff app
