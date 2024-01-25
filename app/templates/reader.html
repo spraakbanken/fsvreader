@@ -1,26 +1,26 @@
 {% block title %}{{ title }}{% endblock %}
 {% block content %}
+
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://fonts.googleapis.com/css?family=Muli:600" rel="stylesheet">
-<link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
-<link rel="stylesheet" type="text/css" href="reader.css">
-<link rel="stylesheet" type="text/css" href="spinner.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Muli:600" rel="stylesheet">
+    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
+    <link rel="stylesheet" type="text/css" href="reader.css">
+    <link rel="stylesheet" type="text/css" href="spinner.css">
 </head>
 
 <body>
-<title>FsvReader</title>
-<div class="container">
-<div class="frame" id="fsvtext"></div>
-<div class="frame" id="lexframe"></div>
-</div>
-<script type="text/javascript" src="reader.js"></script>
-<script type="text/javascript">
-window.onload = function () {
-    window.main('{{textframe}}', '{{lexurl}}')
-}
-</script>
+    <title>FsvReader</title>
+    <div class="container">
+        <div class="frame" id="fsvtext"></div>
+        <div class="frame" id="lexframe"></div>
+    </div>
+    <script type="text/javascript" src="{{ url_for('reader_js') }}"></script>
+    <script type="text/javascript">
+        window.onload = function () {
+            window.main('{{textframe}}', '{{lexurl}}')
+        }
+    </script>
 </body>
 {% endblock %}
-

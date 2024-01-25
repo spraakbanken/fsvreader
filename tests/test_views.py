@@ -13,12 +13,6 @@ def test_can_access_favicon(client, path: str):
 
 
 @pytest.mark.parametrize("path", ["", "/any"])
-def test_can_access_reader_js(client, path: str):
-    response = client.get(f"/reader{path}/reader.js")
-    assert response.status_code == 200
-
-
-@pytest.mark.parametrize("path", ["", "/any"])
 def test_can_access_reader_css(client, path: str):
     response = client.get(f"/reader{path}/reader.css")
     assert response.status_code == 200
