@@ -34,6 +34,14 @@ def create_app(config=None):
     def favicon(dummy):
         return send_static_file("favicon.ico")
 
+    @app.route("/reader/<dummy>/reader.js")
+    def static_reader_js(dummy):
+        return send_static_file("reader.js")
+
+    @app.route("/reader/reader.js")
+    def static_reader_js_base(dummy):
+        return send_static_file("reader.js")
+
     @app.route("/reader.js")
     def reader_js():
         return send_static_file("reader.js")
