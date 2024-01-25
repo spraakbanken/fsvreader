@@ -26,6 +26,10 @@ def create_app(config=None):
     else:
         app.config.from_mapping(config)
 
+    @app.route("/favicon.ico")
+    def favicon_ico():
+        return send_static_file("favicon.ico")
+
     @app.route("/reader/favicon.ico")
     def _favicon_base():
         return send_static_file("favicon.ico")
@@ -39,20 +43,24 @@ def create_app(config=None):
         return send_static_file("reader.js")
 
     @app.route("/reader/reader.js")
-    def static_reader_js_base(dummy):
+    def static_reader_js_base():
         return send_static_file("reader.js")
 
     @app.route("/reader.js")
     def reader_js():
         return send_static_file("reader.js")
 
+    @app.route("/reader/<filename>.css")
+    def static_css_base(filename):
+        return send_static_file(f"{filename}.css")
+
     @app.route("/reader/<dummy>/<filename>.css")
     def static_css(dummy, filename):
         return send_static_file(f"{filename}.css")
 
-    @app.route("/reader/<filename>.css")
-    def static_css_base(filename):
-        return send_static_file(f"{filename}.css")
+    @app.route("/reader.css")
+    def reader_css():
+        return send_static_file("reader.css")
 
     @app.route("/fsvreader.html")
     def text():
@@ -63,7 +71,7 @@ def create_app(config=None):
         return render_template(
             "reader.html",
             textframe="fsvreader.html",
-            lexframe="fsvreader/lexseasy/hund--hime",
+            lexframe="/fsvreader/lexseasy/hund--hime",
             lexurl=app.config["APPLICATION_ROOT"] + "/fsvreader/lexseasy/",
         )
 
