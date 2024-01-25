@@ -62,6 +62,10 @@ def create_app(config=None):
     def reader_css():
         return send_static_file("reader.css")
 
+    @app.route("/spinner.css")
+    def spinner_css():
+        return send_static_file("spinner.css")
+
     @app.route("/fsvreader.html")
     def text():
         return serve_static_page("fsvreader")
