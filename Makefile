@@ -57,8 +57,8 @@ help:
 	@echo ""
 
 PLATFORM := `uname -o`
-REPO := "<REPO-NAME-HERE>"
-PROJECT_SRC := "<SRC-FOLDER-HERE>"
+REPO := "spraakbanken/fsvreader"
+PROJECT_SRC := "app"
 
 ifeq (${VIRTUAL_ENV},)
   VENV_NAME = .venv
@@ -166,3 +166,6 @@ snapshot-update:
 	${INVENV} pytest --snapshot-update
 
 ### === project targets below this line ===
+
+serve-dev:
+	${INVENV} watchfiles "gunicorn --chdir app --bind 'localhost:8000' app.views:app" app
