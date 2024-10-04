@@ -18,7 +18,7 @@ concurrency:
 name: rolling
 
 env:
-  MINIMUM_PYTHON_VERSION: "3.8"
+  MINIMUM_PYTHON_VERSION: "3.10"
   UV_VERSION: "0.3.5"
   UV_CACHE_DIR: /tmp/.uv-cache
 
