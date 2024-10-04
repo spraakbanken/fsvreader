@@ -58,7 +58,7 @@ help:
 
 PLATFORM := `uname -o`
 REPO := "spraakbanken/fsvreader"
-PROJECT_SRC := "app"
+PROJECT_SRC := "fsvreader"
 
 ifeq (${VIRTUAL_ENV},)
   VENV_NAME = .venv
@@ -168,4 +168,4 @@ snapshot-update:
 ### === project targets below this line ===
 
 serve-dev:
-	${INVENV} watchfiles "gunicorn --chdir app --bind 'localhost:8000' app.views:app" app
+	${INVENV} watchfiles "gunicorn --chdir fsvreader --bind 'localhost:8000' fsvreader.views:app" ${PROJECT_SRC}

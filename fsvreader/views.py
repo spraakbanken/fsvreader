@@ -143,7 +143,7 @@ def create_app(config=None):
                         hit["_source"].get("xml").encode("utf-8")
                     ).itertext()
                 )
-                if re.search("^%s[ ,.;]*[sS]e\s\S*[,.:]*$" % base, text):
+                if re.search(r"^%s[ ,.;]*[sS]e\s\S*[,.:]*$" % base, text):
                     continue
                 if len(text) > 40:
                     hit["_source"]["pre"] = text[:30]
