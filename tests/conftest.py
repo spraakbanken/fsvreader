@@ -1,6 +1,6 @@
 import pytest
 
-from app.views import create_app
+from fsvreader.views import create_app
 
 
 @pytest.fixture()
