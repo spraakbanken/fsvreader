@@ -1,0 +1,27 @@
+<p>{{ hword}}, {{hits}} träffar ({{hitlist}})</p>
+<ul>
+    {% for (word, wordclass) in words %} {% if data[word] %}
+    <li>
+        <a class="{{wordclass}}">{{word}}</a>
+        <ul>
+            {% for _id, hit in data[word] %}
+            <li class=""padd2">
+                <div class="ellipsis" data-word="{{word}}">
+                    <b>{{hit['lexiconName'][0].upper()}}{{hit['lexiconName'][1:]}}</b>
+                    <b><i>{{hit['pos']}}</i></b>
+                    {% if hit['pre'] -%}
+                    <details>
+                        <summary> {{ hit['pre'] }} ...</summary>
+                        <p> {{ hit['text'] }}</p>
+                    </details>
+                    {%- else -%}
+                    <!-- <details><summary> {{ hit['text'] }}</summary></details> -->
+                    <br><span> {{hit['text']}}</span>
+                    {%- endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </li>
+    {% endif %} {% endfor %}
+</ul>
