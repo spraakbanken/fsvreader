@@ -1,0 +1,20 @@
+{% extends "menu_layout.html" %} {% block menu_content %}
+<div>
+    <h1>Äldre religiös prosa</h1>
+    <h4>Texter</h4>
+    <ul>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_religios', textfile='Legendarium-B.html') }}"> Fornsvenska legendariet, enligt Ups C 528</a>
+            txt 1276–1308 / ms 1400-50"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_religios', textfile='Moses-B.html') }}"> Pentateuchparafrasen, enligt Holm A1</a>
+            txt 1300–50 / ms 1526"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_religios', textfile='Birgitta_aut-B.html') }}"> Birgittas uppenbarelser, fsv original</a>
+            1340–1370"
+        </li>
+    </ul>
+</div>
+{% endblock %}

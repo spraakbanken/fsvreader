@@ -1,0 +1,64 @@
+{% extends "menu_layout.html" %} {% block menu_content %}
+<div>
+    <h1>Äldre lagar</h1>
+    <h4>Texter</h4>
+    <ul>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='SkL.html') }}"> Skånelagen, enligt Holm B 76</a>
+            txt 1203–12 / ms 1300–25"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='AVgL.html') }}"> Äldre Västgötalagen, enligt Holm B 59</a>
+            txt ca 1220 / ms ca 1280"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='GL.html') }}"> Gutalagen, enligt Holm B 64</a>
+            ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='OgL.html') }}"> Östgötalagen, enligt Holm B 50</a>
+            txt 1280–90 / ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='YVgL.html') }}"> Yngre Västgötalagen, enligt Holm B 58</a>
+            txt ca 1280 / ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='DL.html') }}"> Äldre Västmannalagen / Dalalagen, enligt Holm B 54</a>
+            txt ca 1280"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='UL.html') }}"> Upplandslagen, enligt Ups B 12</a>
+            ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='HL.html') }}"> Hälsingelagen, enligt Ups B 49</a>
+            ms 1350–1400"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='VmL.html') }}"> Yngre Västmannalagen enligt Holm B 57</a>
+            txt 1300–25 / ms 1300-50"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='BjR.html') }}"> Bjärköarätten, enligt Holm B 58</a>
+            ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='SmL_Kb.html') }}"> Smålandslagens Kyrkobalk</a>
+            ms 1350–1400"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='SdmL.html') }}"> Södermannalagen, enligt Holm B 53</a>
+            txt 1327 / ms ca 1330"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='MEL.html') }}"> Magnus Erikssons Landslag, enligt AM 51</a>
+            txt ca 1350 / ms ca 1350"
+        </li>
+        <li>
+            <a href="{{ url_for('reader', textdir='aldre_lagar', textfile='MESt.html') }}"> Magnus Erikssons Stadslag, enligt Holm B 154</a>
+            txt 1357 / ms 1400–50"
+        </li>
+    </ul>
+</div>
+{% endblock %}
