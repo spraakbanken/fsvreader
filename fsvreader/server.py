@@ -12,6 +12,7 @@ from fastapi.staticfiles import StaticFiles
 
 from fsvreader import routes, templating
 from fsvreader.config import Settings
+from fsvreader.errors import MissingError
 
 
 def create_server(*, settings: Settings) -> FastAPI:
@@ -74,6 +75,20 @@ def configure_logging() -> None:
 
 
 def _configure_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(MissingError)
+    async def _missing_error(request: Request, exc: MissingError):
+        templates = request.app.state.templates
+        return templates.TemplateResponse(
+            request=request,
+            name="404.html",
+            status_code=status.HTTP_404_NOT_FOUND,
+            context={
+                "title": exc.title,
+                "header": exc.header,
+                "message": exc.message,
+            },
+        )
+
     @app.exception_handler(Exception)
     async def _unhandled_exception_handler(request: Request, exc: Exception):
         def extract_exceptions(excs):

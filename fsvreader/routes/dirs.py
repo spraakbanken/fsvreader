@@ -1,6 +1,9 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
+from fsvreader.errors import UnknownDirError
+from fsvreader.metadata import METADATA
+
 router = APIRouter()
 
 
@@ -17,7 +20,11 @@ async def showdir(
     request: Request,
     dirname: str,
 ) -> HTMLResponse:
+    if dirname not in METADATA:
+        raise UnknownDirError(dir=dirname)
     templates = request.app.state.templates
     return templates.TemplateResponse(
-        request=request, name="aldre_lagar.html", context={"title": "Äldre lagar"}
+        request=request,
+        name=f"{dirname}.html",
+        context={"title": METADATA[dirname]["title"]},
     )
