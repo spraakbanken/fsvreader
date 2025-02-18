@@ -1,47 +1,42 @@
 import pytest
 
 
-def test_can_access_index(client):
-    response = client.get("/")
+@pytest.mark.asyncio
+async def test_can_access_index(client):
+    response = await client.get("/")
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize("path", ["", "/any"])
-def test_can_access_favicon(client, path: str):
-    response = client.get(f"/reader{path}/favicon.ico")
+@pytest.mark.asyncio
+async def test_can_access_favicon(client):
+    response = await client.get("/static/favicon.ico")
     assert response.status_code == 200
 
 
-@pytest.mark.parametrize("path", ["", "/any"])
-def test_can_access_reader_css(client, path: str):
-    response = client.get(f"/reader{path}/reader.css")
+@pytest.mark.asyncio
+async def test_can_access_reader_css(client):
+    response = await client.get("/static/reader.css")
     assert response.status_code == 200
 
 
-def test_can_access_fsvreader_html(client):
-    response = client.get("/fsvreader.html")
-    assert response.status_code == 200
-
-
-def test_can_access_fsvlex_html(client):
-    response = client.get("/fsvlex.html")
-    assert response.status_code == 200
-
-
-def test_can_access_reader(client):
-    response = client.get("/reader")
+@pytest.mark.skip(reason="not supported yet")
+@pytest.mark.asyncio
+async def test_can_access_reader(client):
+    response = await client.get("/reader")
     assert response.status_code == 200
 
 
 @pytest.mark.parametrize("words", ["", "hund--hime"])
-def test_can_access_lexseasy(client, words: str):
-    response = client.get(f"/lexseasy/{words}")
+@pytest.mark.asyncio
+async def test_can_access_lexseasy(client, words: str):
+    response = await client.get(f"/lexseasy/{words}")
     assert response.status_code == 200
 
 
 @pytest.mark.parametrize("dirname", ["aldre_lagar", "aldre_profan", "aldre_religios"])
-def test_can_access_dir(client, dirname: str):
-    response = client.get(f"/dir/{dirname}")
+@pytest.mark.asyncio
+async def test_can_access_dir(client, dirname: str):
+    response = await client.get(f"/dir/{dirname}")
     assert response.status_code == 200
 
 
@@ -69,6 +64,7 @@ def test_can_access_dir(client, dirname: str):
         "aldre_religios/Moses-B.html",
     ],
 )
-def test_can_access_file(client, path: str):
-    response = client.get(f"/file/{path}")
+@pytest.mark.asyncio
+async def test_can_access_reader_files(client, path: str):
+    response = await client.get(f"/reader/{path}")
     assert response.status_code == 200

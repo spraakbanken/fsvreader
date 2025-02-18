@@ -110,6 +110,34 @@ async def lookup(
     )
 
 
+@router.get(
+    "/lexseasy/",
+    response_class=HTMLResponse,
+    responses={400: {"model": ErrorMessage}, 501: {"model": Message}},
+    name="lookup-empty",
+)
+async def lookup_empty(
+    request: Request,
+    karp_client: Annotated[Client, Depends(deps.get_karp_client)],
+):
+    wordlist = []
+    worddata = {}
+
+    templates = request.app.state.templates
+
+    return templates.TemplateResponse(
+        request=request,
+        name="lex.html",
+        context={
+            "hword": "",
+            "words": wordlist,
+            "data": worddata,
+            "hitlist": "/".join(w[0] for w in wordlist),
+            "hits": sum(len(v) for v in worddata.values()),
+        },
+    )
+
+
 def process_response(
     response: querying.QueryResponse | None, *, wordlist: list[str]
 ) -> dict[str, Any]:

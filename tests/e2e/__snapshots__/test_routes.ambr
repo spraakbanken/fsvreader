@@ -1,0 +1,55 @@
+# serializer version: 1
+# name: test_index
+  '''
+  <!doctype html>
+  <html lang="sv">
+      <head>
+          <title> FsvReader</title>
+          <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+          <link
+              rel="shortcut icon"
+              href="http://testserver.saldo_ws/static/favicon.ico"
+          />
+          <script
+              src="https://unpkg.com/htmx.org@2.0.3"
+              integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq"
+              crossorigin="anonymous"
+          ></script>
+      </head>
+      <body>
+          
+  <div>
+      <h1>FSvReader</h1>
+      <p>
+          Texterna och metainformationen i FSvReader har hämtats från
+          <a href="http://project2.sol.lu.se/fornsvenska"
+              >Fornsvenska textbanken</a
+          >. För utförligare information, inklusive introducerande kommentarer för
+          varje text om inskrivningsprinciperna, hänvisar vi till Fornsvenska
+          textbanken.
+      </p>
+  
+      <h4>Kategorier</h4>
+      <ul>
+          <li>
+              <a href="http://testserver.saldo_ws/dir/aldre_lagar"
+                  >Äldre lagar</a
+              >
+          </li>
+          <li>
+              <a href="http://testserver.saldo_ws/dir/aldre_profan"
+                  >Äldre övrigt profan prosa</a
+              >
+          </li>
+          <li>
+              <a href="http://testserver.saldo_ws/dir/aldre_religios"
+                  >Äldre religiös prosa</a
+              >
+          </li>
+      </ul>
+  </div>
+  
+      </body>
+  </html>
+  '''
+# ---

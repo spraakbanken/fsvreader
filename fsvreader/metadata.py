@@ -63,6 +63,10 @@ METADATA: dict[str, Metadata] = {
                 "title": "Södermannalagen, enligt Holm B 53",
                 "commentary": "txt 1327 / ms ca 1330",
             },
+            "SdmL-A.html": {
+                "title": "Södermannalagen, enligt Holm B 53 [Utdrag?]",
+                "commentary": "txt 1327 / ms ca 1330",
+            },
             "MEL.html": {
                 "title": "Magnus Erikssons Landslag, enligt AM 51",
                 "commentary": "txt ca 1350 / ms ca 1350",
