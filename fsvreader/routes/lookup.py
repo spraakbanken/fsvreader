@@ -91,20 +91,22 @@ async def lookup(
             )
         ]
     # only list the forms that actually found a hit
-    wordlist = [(word, word.replace(" ", "_")) for word in wordlist if word in worddata]
+    wordlist_tuples = [
+        (word, word.replace(" ", "_")) for word in wordlist if word in worddata
+    ]
     templates = request.app.state.templates
     print(f"{request.headers=}")
     _logger.info("words=%s", words)
     _logger.info("worddata=%s", worddata)
-    _logger.info("wordlist=%s", wordlist)
+    _logger.info("wordlist_tuples=%s", wordlist_tuples)
     return templates.TemplateResponse(
         request=request,
         name="lex.html",
         context={
-            "hword": wordlist[0][0],
-            "words": wordlist,
+            "hword": wordlist_tuples[0][0],
+            "words": wordlist_tuples,
             "data": worddata,
-            "hitlist": "/".join(w[0] for w in wordlist),
+            "hitlist": "/".join(w[0] for w in wordlist_tuples),
             "hits": sum(len(v) for v in worddata.values()),
         },
     )
@@ -120,8 +122,8 @@ async def lookup_empty(
     request: Request,
     karp_client: Annotated[Client, Depends(deps.get_karp_client)],
 ):
-    wordlist = []
-    worddata = {}
+    wordlist: list[str] = []
+    worddata: dict[str, Any] = {}
 
     templates = request.app.state.templates
 
@@ -152,7 +154,7 @@ def process_response(
         base: str = hit["baseform"]
         wfs = [
             wf.get("writtenForm", "")
-            for wf in hit.get("inflectionTable", [{}])
+            for wf in hit.get("inflectionTable", [{}])  # type: ignore [union-attr]
             if wf.get("tag") == "derived"
         ]
         _logger.info("hit['xml']='%s'", hit["xml"])
@@ -163,7 +165,7 @@ def process_response(
         if len(text) > 40:
             hit["pre"] = text[:30]
         hit["text"] = text
-        pos: Union[str, list[str]] = hit.get("partOfSpeech", "")
+        pos: Union[str, list[str]] = hit.get("partOfSpeech", "")  # type: ignore [assignment]
         if isinstance(pos, list):
             pos = ", ".join(pos)
         hit["pos"] = pos
