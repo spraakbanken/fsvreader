@@ -168,4 +168,4 @@ snapshot-update:
 ### === project targets below this line ===
 
 serve-dev:
-	${INVENV} watchfiles "gunicorn --chdir fsvreader --bind 'localhost:8000' fsvreader.views:app" ${PROJECT_SRC}
+	${INVENV} fastapi dev fsvreader/main.py

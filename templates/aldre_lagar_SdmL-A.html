@@ -1,0 +1,39 @@
+{% extends "reader_layout.html" %} {% block content %}
+
+<html><body><section id="text" level="0" num="1" num-in-level="1" type="rtf-native">
+   <paragraph-definition adjust-right="true" font-size="10.00" font-style="Times" name="Plain Text" style-number="s0001" widow-control="true">
+    <p>
+     <a class="codex" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='codex') }}" hx-swap="innerHtml">Codex</a>
+    <a class="iuris" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='iuris') }}" hx-swap="innerHtml">iuris</a>
+    <grey>Sudermannici.</grey>
+   </p>
+   <p></p>
+   <p>
+     <grey>Prologus.</grey>
+   </p>
+   <p></p>
+   <p>
+    <a class="guþ gud gruþ" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='guþ--gud--gruþ') }}" hx-swap="innerHtml">Guþ</a>
+    <a class="alzwaldughær alzvaldugher alzvaldogher alvaldogher" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='alzwaldughær--alzvaldugher--alzvaldogher--alvaldogher') }}" hx-swap="innerHtml">alzwaldughær</a>
+    <a class="scapare skapare skaper skapa" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='scapare--skapare--skaper--skapa') }}" hx-swap="innerHtml">scapare</a>
+    <a class="himils himil hemel hime" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='himils--himil--hemel--hime') }}" hx-swap="innerHtml">himils</a>
+    <a class="ok oker uk" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='ok--oker--uk') }}" hx-swap="innerHtml">ok</a>
+    <a class="iorþæ iorþa jorþa iorþ jorþ jarþe" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='iorþæ--iorþa--jorþa--iorþ--jorþ--jarþe') }}" hx-swap="innerHtml">iorþæ</a>
+    <a class="ok" oker="" uk="" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='ok') }}" hx-swap="innerHtml">ok</a>
+    <a class="hime" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='hime') }}" hx-swap="innerHtml">hime</a>
+    <a class="alz al als" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='alz--al--als') }}" hx-swap="innerHtml">alz</a>
+    <a class="þæs þäs þæs þän þæn þär þær" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='þæs--þäs--þæs--þän--þæn--þär--þær') }}" hx-swap="innerHtml">þæs</a>
+    <a class="þær þär þær þa þar" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='þær--þär--þær--þa--þar') }}" hx-swap="innerHtml">þær</a>
+    <a class="innan inna rinnan" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='innan--inna--rinnan') }}" hx-swap="innerHtml">innan</a>
+    <a class="ær är ær ä æ ar" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='ær--är--ær--ä--æ--ar') }}" hx-swap="innerHtml">ær</a>
+    <a class="han an har" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='han--an--har') }}" hx-swap="innerHtml">han</a>
+    <a class="gaf ga gäf gæf" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='gaf--ga--gäf--gæf') }}" hx-swap="innerHtml">gaf</a>
+    <a class="fyrste fyrster fyrsta fyrst" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='fyrste--fyrster--fyrsta--fyrst') }}" hx-swap="innerHtml">fyrste</a>
+    <a class="lagh lagher laker" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='lagh--lagher--laker') }}" hx-swap="innerHtml">lagh</a>
+    <a class="ok oker ukk" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='ok--oker--ukk') }}" hx-swap="innerHtml">ok</a>
+    <a class="satti sati siatti satt" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='satti--sati--siatti--satt') }}" hx-swap="innerHtml">satti</a>
+    <a class="moysi mosi moy masi" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='moysi--mosi--moy--masi') }}" hx-swap="innerHtml">moysi</a>
+    <a class="j i ir e" target="lexframe" hx-target="#main>#lexframe" hx-get="{{ url_for('lookup', words='j--i--ir--e') }}" hx-swap="innerHtml">J</a>
+    </p></paragraph-definition></section>
+</body></html>
+{% endblock %}

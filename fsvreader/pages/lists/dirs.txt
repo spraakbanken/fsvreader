@@ -1,3 +1,0 @@
-aldre_lagar	Äldre lagar
-aldre_profan	Äldre övrigt profan prosa
-aldre_religios	Äldre religiös prosa

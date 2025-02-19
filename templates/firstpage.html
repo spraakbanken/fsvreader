@@ -1,0 +1,32 @@
+{% extends "layout.html" %} {% block content %}
+<div>
+    <h1>FSvReader</h1>
+    <p>
+        Texterna och metainformationen i FSvReader har hämtats från
+        <a href="http://project2.sol.lu.se/fornsvenska"
+            >Fornsvenska textbanken</a
+        >. För utförligare information, inklusive introducerande kommentarer för
+        varje text om inskrivningsprinciperna, hänvisar vi till Fornsvenska
+        textbanken.
+    </p>
+
+    <h4>Kategorier</h4>
+    <ul>
+        <li>
+            <a href="{{ url_for('showdir', dirname='aldre_lagar') }}"
+                >Äldre lagar</a
+            >
+        </li>
+        <li>
+            <a href="{{ url_for('showdir', dirname='aldre_profan') }}"
+                >Äldre övrigt profan prosa</a
+            >
+        </li>
+        <li>
+            <a href="{{ url_for('showdir', dirname='aldre_religios') }}"
+                >Äldre religiös prosa</a
+            >
+        </li>
+    </ul>
+</div>
+{% endblock %}
