@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AppSettings(BaseModel):
@@ -10,3 +10,9 @@ class AppSettings(BaseModel):
 
 class Settings(BaseSettings):
     app: AppSettings = AppSettings()
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore",
+        env_nested_delimiter="__",
+        env_prefix="FSVREADER__",
+    )
