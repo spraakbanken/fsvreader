@@ -4,19 +4,19 @@ To download, install and run:
 
 ```
 git clone https://github.com/spraakbanken/fsvreader.git
-poetry install
-poetry shell
-cd fsvreader
-python views.py
+make install
+source .venv/bin/activate
+
+make serve-dev
 ```
 
-- go to `http://localhost:5002/reader/aldre_lagar/Yvgl.html`
+- go to `http://localhost:8000/reader/aldre_lagar/Yvgl.html`
 
 Each time you start from a new terminal, you must do:
 
-`poetry shell`
+`source .venv/bin/activate`
 
-`python views.py`
+`make serve-dev`
 
 
-Every time you change the code, restart the python program
+Every time you change the code, the server will reload (but when updating templates you might need to restart the server)
