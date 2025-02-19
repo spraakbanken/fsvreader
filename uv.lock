@@ -236,13 +236,13 @@ source = { editable = "." }
 dependencies = [
     { name = "asgi-correlation-id" },
     { name = "fastapi", extra = ["standard"] },
-    { name = "gunicorn" },
     { name = "httpx" },
     { name = "jinja2" },
     { name = "karp-api-client" },
     { name = "lxml" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "uvicorn" },
 ]
 
 [package.dev-dependencies]
@@ -262,13 +262,13 @@ dev = [
 requires-dist = [
     { name = "asgi-correlation-id", specifier = ">=4.3.4" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.115.2" },
-    { name = "gunicorn", specifier = ">=21.2.0" },
     { name = "httpx", specifier = ">=0.27.2" },
     { name = "jinja2", specifier = ">=3.1.4" },
     { name = "karp-api-client", git = "https://github.com/spraakbanken/karp-api-client-py" },
     { name = "lxml", specifier = ">=5.3.0" },
     { name = "pydantic", specifier = ">=2.9.2" },
     { name = "pydantic-settings", specifier = ">=2.5.2" },
+    { name = "uvicorn", specifier = ">=0.34.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -282,18 +282,6 @@ dev = [
     { name = "syrupy", specifier = ">=4.7.2" },
     { name = "uvicorn", specifier = ">=0.31.1" },
     { name = "watchfiles", specifier = ">=0.24.0" },
-]
-
-[[package]]
-name = "gunicorn"
-version = "23.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "packaging" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/34/72/9614c465dc206155d93eff0ca20d42e1e35afc533971379482de953521a4/gunicorn-23.0.0.tar.gz", hash = "sha256:f014447a0101dc57e294f6c18ca6b40227a4c90e9bdb586042628030cba004ec", size = 375031 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cb/7d/6dac2a6e1eba33ee43f318edbed4ff29151a49b5d37f080aad1e6469bca4/gunicorn-23.0.0-py3-none-any.whl", hash = "sha256:ec400d38950de4dfd418cff8328b2c8faed0edb0d517d3394e457c317908ca4d", size = 85029 },
 ]
 
 [[package]]
